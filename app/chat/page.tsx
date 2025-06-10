@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowUpIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
@@ -135,9 +135,9 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen bg-[#0C0C0C]">
+    <div className="flex flex-col h-[100dvh] bg-[#0C0C0C]">
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-full">
         {/* Chat messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {messages.map((message, i) => (
@@ -193,7 +193,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-        <div className="border-t border-black p-4">
+        <div className="border-t border-black p-4 bg-[#0C0C0C] sticky bottom-0">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="relative">
               <textarea
