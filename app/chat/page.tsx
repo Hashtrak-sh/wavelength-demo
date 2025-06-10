@@ -137,7 +137,7 @@ export default function ChatPage() {
   return (
     <div className="flex h-screen bg-[#0C0C0C]">
       {/* New Chat Button */}
-      <div className="w-16 border-r border-gray-800 flex flex-col items-center pt-4">
+      <div className="w-16 border-r border-black-800 flex flex-col items-center pt-4">
         <button
           onClick={clearChat}
           className="p-3 hover:bg-gray-800 rounded-lg transition-colors group"
@@ -157,7 +157,7 @@ export default function ChatPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="border-b border-gray-800 p-4 flex items-center justify-between">
+        <header className="border-b border-black-800 p-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button 
               onClick={() => router.push('/')}
@@ -224,7 +224,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-        <div className="border-t border-gray-800 p-4">
+        <div className="border-t border-black-800 p-4">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="relative">
               <textarea
