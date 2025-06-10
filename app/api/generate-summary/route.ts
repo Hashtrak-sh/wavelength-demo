@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
   const result = await generateText({
     model: anthropic("claude-3-opus-20240229"),
-    prompt: `Based on this conversation, create a thoughtful 2-3 sentence summary of this person's unique "wavelength" - their personality, interests, communication style, and what makes them distinctive. Focus on their authentic qualities, thinking patterns, and core characteristics that emerged through the dialogue.
+    prompt: `Based on this conversation, create a thoughtful 2-3 sentence summary of this person's unique "violet" - their personality, interests, communication style, and what makes them distinctive. Focus on their authentic qualities, thinking patterns, and core characteristics that emerged through the dialogue.
 
 Conversation:
 ${conversationText}
