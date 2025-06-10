@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowUpIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
@@ -49,7 +49,9 @@ export default function ChatPage() {
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length > 1) { // Only auto-scroll if there's more than one message
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages]);
 
   // Dynamic textarea height
@@ -135,11 +137,11 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-[#0C0C0C]">
+    <div className="flex h-[100dvh] bg-[#0C0C0C]">
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col h-full">
+      <div className="flex-1 flex flex-col">
         {/* Chat messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-20">
           {messages.map((message, i) => (
             <div
               key={i}
@@ -193,7 +195,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-        <div className="border-t border-black p-4 bg-[#0C0C0C] sticky bottom-0">
+        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-[#0C0C0C]">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="relative">
               <textarea
