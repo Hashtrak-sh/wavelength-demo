@@ -24,30 +24,6 @@ export function Navbar() {
               priority
             />
           </Link>
-
-          <div className="flex items-center space-x-2 md:space-x-4">
-            <Link href="/chat">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className={`text-gray-300 hover:text-white p-1.5 md:p-2 ${pathname === '/chat' ? 'bg-gray-800' : ''}`}
-              >
-                <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
-              </Button>
-            </Link>
-
-            <NotificationsDropdown />
-
-            <Link href="/profile">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className={`text-gray-300 hover:text-white p-1.5 md:p-2 ${pathname === '/profile' ? 'bg-gray-800' : ''}`}
-              >
-                <User className="h-4 w-4 md:h-5 md:w-5" />
-              </Button>
-            </Link>
-          </div>
         </div>
       </div>
     </nav>
