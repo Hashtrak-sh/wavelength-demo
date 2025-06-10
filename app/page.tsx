@@ -9,7 +9,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center bg-black text-white p-4">
       <div className="flex flex-col items-center mt-[10vh] px-4 w-full max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-light mb-8 md:mb-12 text-center">Wavelength</h1>
+        <h1 
+          style={{ fontFamily: 'Poppins, sans-serif' }}
+          className="text-4xl md:text-5xl font-light mb-8 md:mb-12 text-center">Wavelength
+        </h1>
         <p className="text-xl md:text-3xl text-gray-400 italic mb-8 md:mb-12 text-center">Only meet people of your wavelength</p>
         <button
           onClick={() => router.push('/chat')}
