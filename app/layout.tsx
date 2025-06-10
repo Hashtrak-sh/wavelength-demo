@@ -2,7 +2,6 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { Navbar } from "@/components/navbar"
 import { AuthProvider } from "@/components/auth-provider"
 import { Toaster } from "@/components/ui/toaster"
 
@@ -51,8 +50,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <div className={`${inter.className} bg-gray text-white min-h-screen`}>
           <AuthProvider>
-            <Navbar />
-            <main className="pt-16">{children}</main>
+            <main>{children}</main>
             <Toaster />
           </AuthProvider>
         </div>
