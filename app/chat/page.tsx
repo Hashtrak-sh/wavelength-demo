@@ -138,19 +138,6 @@ export default function ChatPage() {
     <div className="flex h-screen bg-[#0C0C0C]">
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="border-b border-black p-4 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <button 
-              onClick={() => router.push('/')}
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <ArrowUpIcon className="h-5 w-5 transform rotate-[-90deg]" />
-            </button>
-            <h1 className="text-xl font-semibold text-white">Wavelength</h1>
-          </div>
-        </header>
-
         {/* Chat messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {messages.map((message, i) => (
