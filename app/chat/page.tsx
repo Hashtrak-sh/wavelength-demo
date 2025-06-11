@@ -177,7 +177,7 @@ export default function ChatPage() {
                 </div>
               )}
               <div
-                className={`relative max-w-[80%] rounded-2xl px-4 py-3 ${
+                className={`relative max-w-[80%] rounded-2xl px-4 py-3 break-words ${
                   message.role === 'user'
                     ? 'bg-white text-black'
                     : 'bg-gray-800 text-white'
