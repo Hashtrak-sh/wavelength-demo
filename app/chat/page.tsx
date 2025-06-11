@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { ArrowUpIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { useToast } from "@/hooks/use-toast"
 
 type Message = {
@@ -16,7 +16,7 @@ const MAX_RETRIES = 2;
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Hi! I'm Ishaan. I help people find their wavelength through simple chats, not boring forms. Want to talk? It'll be fun!!"
+  content: "Hi! I'm Ishaan. I help people find their wavelength through simple chats, not boring forms. Want to talk? It'll be fun!"
 };
 
 export default function ChatPage() {
@@ -216,7 +216,7 @@ export default function ChatPage() {
               <button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="absolute right-2 bottom-2.5 text-white p-1.5 rounded-lg 
+                className="absolute right-2 bottom-0 top-0 flex items-center justify-center text-white p-1.5 rounded-lg my-auto
                          disabled:opacity-50 disabled:cursor-not-allowed
                          enabled:bg-purple-600 enabled:hover:bg-purple-700 transition-colors"
               >
