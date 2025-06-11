@@ -137,7 +137,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-[100dvh] bg-[#0C0C0C]">
+    <div className="flex h-[100dvh] bg-black">
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Chat messages */}
@@ -195,7 +195,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-[#0C0C0C]">
+        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="relative flex items-center bg-gray-800 rounded-xl">
               <textarea
