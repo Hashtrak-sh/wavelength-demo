@@ -151,7 +151,7 @@ export default function ChatPage() {
             >
               {message.role === 'assistant' && (
                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                  <span className="text-black text-sm">W</span>
+                  <span className="text-black text-sm">wL</span>
                 </div>
               )}
               <div
@@ -165,7 +165,7 @@ export default function ChatPage() {
               </div>
               {message.role === 'user' && (
                 <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
-                  <span className="text-white text-sm">U</span>
+                  <span className="text-white text-sm">Me</span>
                 </div>
               )}
             </div>
@@ -173,7 +173,7 @@ export default function ChatPage() {
           {isLoading && (
             <div className="flex items-start space-x-4">
               <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                <span className="text-black text-sm">W</span>
+                <span className="text-black text-sm">wL</span>
               </div>
               <div className="bg-gray-800 text-white px-4 py-3 rounded-2xl">
                 <div className="flex space-x-2">
