@@ -232,7 +232,7 @@ export default function ChatPage() {
                 }}
                 placeholder="Share your thoughts..."
                 className="w-full bg-transparent text-white rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[100px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
-                style={{ height: '45px' }}
+                style={{ height: '35px' }}
                 rows={1}
                 disabled={isLoading}
               />
