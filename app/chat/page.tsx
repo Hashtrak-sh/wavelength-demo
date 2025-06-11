@@ -150,14 +150,14 @@ export default function ChatPage() {
               }`}
             >
               {message.role === 'assistant' && (
-                <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0">
-                  <span className="text-white text-sm">W</span>
+                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
+                  <span className="text-black text-sm">W</span>
                 </div>
               )}
               <div
                 className={`relative max-w-[80%] rounded-2xl px-4 py-3 ${
                   message.role === 'user'
-                    ? 'bg-purple-600 text-white'
+                    ? 'bg-white text-black'
                     : 'bg-gray-800 text-white'
                 }`}
               >
@@ -172,8 +172,8 @@ export default function ChatPage() {
           ))}
           {isLoading && (
             <div className="flex items-start space-x-4">
-              <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-sm">W</span>
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
+                <span className="text-black text-sm">W</span>
               </div>
               <div className="bg-gray-800 text-white px-4 py-3 rounded-2xl">
                 <div className="flex space-x-2">
