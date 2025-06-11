@@ -209,7 +209,7 @@ export default function ChatPage() {
                   }
                 }}
                 placeholder="Share your thoughts..."
-                className="w-full bg-gray-800 text-white rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-white resize-none"
+                className="w-full bg-gray-800 text-white rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
                 rows={1}
                 disabled={isLoading}
               />
@@ -218,7 +218,7 @@ export default function ChatPage() {
                 disabled={isLoading || !input.trim()}
                 className="absolute right-2 bottom-2.5 text-white p-1.5 rounded-lg 
                          disabled:opacity-50 disabled:cursor-not-allowed
-                         enabled:bg-white enabled:hover:bg-white transition-colors"
+                         enabled:bg-purple-600 enabled:hover:bg-purple-700 transition-colors"
               >
                 <PaperAirplaneIcon className="h-5 w-5" />
               </button>
