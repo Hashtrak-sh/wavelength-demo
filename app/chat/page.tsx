@@ -16,7 +16,7 @@ const MAX_RETRIES = 2;
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Hi! I'm Ishaan. I help people find their wavelength through simple chats, not boring forms. Want to talk? It'll be fun!"
+  content: "Hi! I'm Ishaan. I help people find their wavelength through simple chats, not boring forms. Want to talk? It'll be fun!!"
 };
 
 export default function ChatPage() {
