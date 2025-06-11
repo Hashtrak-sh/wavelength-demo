@@ -1,68 +1,183 @@
-import { supabase } from './supabase'
-import type { Database } from './supabase-types'
-import type { Message } from './supabase-types'
+import { createClient } from '@supabase/supabase-js';
 
-export async function createChatSession(userId: string, title: string | null = null) {
-  const { data, error } = await supabase
-    .from('chat_sessions')
-    .insert({ user_id: userId, title })
-    .select()
-    .single()
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (error) throw error
-  return data
+// Validate environment variables
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    'Missing Supabase environment variables. Please check your .env.local file.'
+  );
 }
 
-export async function getChatSessions(userId: string) {
-  const { data, error } = await supabase
-    .from('chat_sessions')
-    .select('*')
-    .eq('user_id', userId)
-    .order('updated_at', { ascending: false })
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-  if (error) throw error
-  return data
+export interface ChatMessage {
+  id?: string;
+  session_id: string;
+  message: string;
+  role: 'user' | 'assistant';
+  created_at?: string;
+  metadata?: Record<string, any>;
 }
 
-export async function getChatMessages(chatSessionId: string) {
-  const { data, error } = await supabase
-    .from('messages')
-    .select('*')
-    .eq('chat_session_id', chatSessionId)
-    .order('created_at', { ascending: true })
-
-  if (error) throw error
-  return data
+export interface ChatSession {
+  id: string;
+  user_id: string | null;
+  created_at: string;
+  has_summary: boolean;
+  summary: string | null;
 }
 
-export async function addMessage(message: Omit<Message, 'id' | 'created_at'>) {
-  const { data, error } = await supabase
-    .from('messages')
-    .insert(message)
-    .select()
-    .single()
+// Helper function to get or generate anonymous ID
+const getAnonymousId = () => {
+  if (typeof window === 'undefined') return null;
+  
+  let anonymousId = localStorage.getItem('wavelength_anonymous_id');
+  if (!anonymousId) {
+    anonymousId = crypto.randomUUID();
+    localStorage.setItem('wavelength_anonymous_id', anonymousId);
+  }
+  return anonymousId;
+};
 
-  if (error) throw error
-  return data
-}
+export const chatService = {
+  // Create a new chat session
+  async createSession(): Promise<ChatSession> {
+    try {
+      const anonymousId = getAnonymousId();
+      const { data, error } = await supabase
+        .from('chat_sessions')
+        .insert({ user_id: anonymousId })
+        .select()
+        .single();
 
-export async function updateChatSession(sessionId: string, updates: { title?: string }) {
-  const { data, error } = await supabase
-    .from('chat_sessions')
-    .update(updates)
-    .eq('id', sessionId)
-    .select()
-    .single()
+      if (error) {
+        console.error('Error creating session:', error);
+        throw new Error(`Failed to create chat session: ${error.message}`);
+      }
+      if (!data) {
+        throw new Error('No session data returned');
+      }
+      return data;
+    } catch (error) {
+      console.error('Error in createSession:', error);
+      throw error;
+    }
+  },
 
-  if (error) throw error
-  return data
-}
+  // Get or create a chat session
+  async getOrCreateSession(): Promise<ChatSession> {
+    try {
+      const anonymousId = getAnonymousId();
+      
+      // Try to get the most recent session for the anonymous user
+      const { data: existingSession, error: fetchError } = await supabase
+        .from('chat_sessions')
+        .select('*')
+        .eq('user_id', anonymousId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
-export async function deleteChatSession(sessionId: string) {
-  const { error } = await supabase
-    .from('chat_sessions')
-    .delete()
-    .eq('id', sessionId)
+      if (fetchError) {
+        console.error('Error fetching session:', fetchError);
+        throw new Error(`Failed to fetch chat session: ${fetchError.message}`);
+      }
 
-  if (error) throw error
-} 
+      if (existingSession) {
+        return existingSession;
+      }
+
+      // If no session exists, create a new one
+      return this.createSession();
+    } catch (error) {
+      console.error('Error in getOrCreateSession:', error);
+      throw error;
+    }
+  },
+
+  // Save a message to the chat session
+  async saveMessage(message: Omit<ChatMessage, 'id' | 'created_at'>): Promise<ChatMessage> {
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .insert(message)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error saving message:', error);
+        throw new Error(`Failed to save message: ${error.message}`);
+      }
+      if (!data) {
+        throw new Error('No message data returned');
+      }
+      return data;
+    } catch (error) {
+      console.error('Error in saveMessage:', error);
+      throw error;
+    }
+  },
+
+  // Get chat history for a session
+  async getChatHistory(sessionId: string): Promise<ChatMessage[]> {
+    try {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('session_id', sessionId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching chat history:', error);
+        throw new Error(`Failed to fetch chat history: ${error.message}`);
+      }
+      return data || [];
+    } catch (error) {
+      console.error('Error in getChatHistory:', error);
+      throw error;
+    }
+  },
+
+  // Update session summary
+  async updateSessionSummary(sessionId: string, summary: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('chat_sessions')
+        .update({ 
+          summary,
+          has_summary: true 
+        })
+        .eq('id', sessionId);
+
+      if (error) {
+        console.error('Error updating summary:', error);
+        throw new Error(`Failed to update summary: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error in updateSessionSummary:', error);
+      throw error;
+    }
+  },
+
+  // Get session summary
+  async getSessionSummary(sessionId: string): Promise<string | null> {
+    try {
+      const { data, error } = await supabase
+        .from('chat_sessions')
+        .select('summary')
+        .eq('id', sessionId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching summary:', error);
+        throw new Error(`Failed to fetch summary: ${error.message}`);
+      }
+      return data?.summary || null;
+    } catch (error) {
+      console.error('Error in getSessionSummary:', error);
+      throw error;
+    }
+  }
+}; 

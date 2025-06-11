@@ -1,10 +1,12 @@
-"use client"
+'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
+import { chatService } from '@/lib/supabase-service';
+
 
 type Message = {
   role: 'user' | 'assistant';
@@ -25,31 +27,55 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
   const { toast } = useToast();
 
-  // Load messages from localStorage on component mount
+  // Initialize chat session and load messages
   useEffect(() => {
-    const savedMessages = localStorage.getItem('chatMessages');
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    } else {
-      setMessages([INITIAL_MESSAGE]);
-    }
-  }, []);
+    const initializeChat = async () => {
+      try {
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          throw new Error('Missing Supabase environment variables. Please check your .env.local file.');
+        }
 
-  // Save messages to localStorage whenever they change
-  useEffect(() => {
-    if (messages.length > 0) {
-      localStorage.setItem('chatMessages', JSON.stringify(messages));
-    }
-  }, [messages]);
+        // Get or create a session
+        const session = await chatService.getOrCreateSession();
+        if (!session?.id) {
+          throw new Error('Failed to create or get chat session');
+        }
+        setSessionId(session.id);
+
+        // Load existing messages or set initial message
+        const history = await chatService.getChatHistory(session.id);
+        if (history.length > 0) {
+          setMessages(history.map(msg => ({
+            role: msg.role,
+            content: msg.message
+          })));
+        } else {
+          setMessages([INITIAL_MESSAGE]);
+          // Save initial message to Supabase
+          await chatService.saveMessage({
+            session_id: session.id,
+            message: INITIAL_MESSAGE.content,
+            role: INITIAL_MESSAGE.role
+          });
+        }
+      } catch (error: any) {
+        console.error('Error initializing chat:', error);
+        setError(error.message || 'Failed to initialize chat. Please check your Supabase configuration.');
+      }
+    };
+
+    initializeChat();
+  }, []);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    if (messages.length > 1) { // Only auto-scroll if there's more than one message
+    if (messages.length > 1) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
@@ -65,7 +91,7 @@ export default function ChatPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !sessionId) return;
 
     const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
@@ -74,6 +100,14 @@ export default function ChatPage() {
     setError(null);
 
     try {
+      // Save user message to Supabase
+      await chatService.saveMessage({
+        session_id: sessionId,
+        message: userMessage.content,
+        role: userMessage.role
+      });
+
+      // Get AI response
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -90,32 +124,28 @@ export default function ChatPage() {
       }
 
       const data = await response.json();
-      console.log('API Response:', data);
-      setMessages(prev => [...prev, { role: data.role, content: data.content }]);
+      const assistantMessage = { role: data.role, content: data.content };
+      setMessages(prev => [...prev, assistantMessage]);
+
+      // Save assistant message to Supabase
+      await chatService.saveMessage({
+        session_id: sessionId,
+        message: data.content,
+        role: data.role
+      });
 
       // Check if this is the last message that generates the summary
-      if (data.generatesSummary) {
-        console.log('Summary generation detected');
-        // Make sure we have a summary before proceeding
-        if (!data.summary) {
-          console.error('Summary was expected but not received');
-          return;
-        }
-        console.log('Saving summary:', data.summary);
-
+      if (data.generatesSummary && data.summary) {
+        await chatService.updateSessionSummary(sessionId, data.summary);
+        
         toast({
           title: "Summary Generated!",
           description: "Your wavelength summary is now available.",
           duration: 5000,
         });
-        
-        // Store the summary in localStorage
-        localStorage.setItem('wavelengthSummary', data.summary);
-        localStorage.setItem('hasSummary', 'true');
 
-        // Force a reload when navigating to ensure fresh state
+        // Navigate to profile page
         setTimeout(() => {
-          console.log('Navigating to profile page...');
           window.location.href = '/profile?tab=Your%20Wavelength';
         }, 1500);
       }
@@ -126,14 +156,6 @@ export default function ChatPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Add a function to clear chat history
-  const clearChat = () => {
-    localStorage.removeItem('chatMessages');
-    localStorage.removeItem('wavelengthSummary');
-    localStorage.removeItem('hasSummary');
-    setMessages([INITIAL_MESSAGE]);
   };
 
   return (
