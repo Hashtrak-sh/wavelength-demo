@@ -11,6 +11,17 @@ export const metadata: Metadata = {
   title: "Wavelength - AI Chat Platform",
   description: "Connect and chat with AI to discover your wavelength",
   generator: 'v0.dev',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    viewportFit: 'cover',
+  },
+  themeColor: '#000000',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Wavelength',
+  },
   icons: {
     icon: [
       {
@@ -45,15 +56,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head />
-      <body suppressHydrationWarning>
-        <div className={`${inter.className} bg-gray text-white min-h-screen`}>
-          <AuthProvider>
-            <main>{children}</main>
-            <Toaster />
-          </AuthProvider>
-        </div>
+    <html lang="en" className="dark">
+      <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      </head>
+      <body className={inter.className}>
+        <AuthProvider>
+          <main>{children}</main>
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   )

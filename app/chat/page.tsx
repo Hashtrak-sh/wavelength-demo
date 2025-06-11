@@ -2,9 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { useToast } from "@/hooks/use-toast";
 import { chatService } from '@/lib/supabase-service';
+
 
 type Message = {
   role: 'user' | 'assistant';
@@ -157,7 +159,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-[100dvh] bg-[#0C0C0C]">
+    <div className="flex h-[100dvh] bg-black">
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Chat messages */}
@@ -215,9 +217,9 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-[#0C0C0C]">
+        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-            <div className="relative">
+            <div className="relative flex items-center bg-gray-800 rounded-xl">
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -229,19 +231,21 @@ export default function ChatPage() {
                   }
                 }}
                 placeholder="Share your thoughts..."
-                className="w-full bg-gray-800 text-white rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                className="w-full bg-transparent text-white rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
                 rows={1}
                 disabled={isLoading}
               />
-              <button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="absolute right-2 bottom-2.5 text-white p-1.5 rounded-lg 
-                         disabled:opacity-50 disabled:cursor-not-allowed
-                         enabled:bg-purple-600 enabled:hover:bg-purple-700 transition-colors"
-              >
-                <PaperAirplaneIcon className="h-5 w-5" />
-              </button>
+              <div className="absolute right-2 flex items-center h-full pr-1">
+                <button
+                  type="submit"
+                  disabled={isLoading || !input.trim()}
+                  className="flex items-center justify-center text-white p-1.5 rounded-lg
+                           disabled:opacity-50 disabled:cursor-not-allowed
+                           enabled:bg-purple-600 enabled:hover:bg-purple-700 transition-colors"
+                >
+                  <PaperAirplaneIcon className="h-5 w-5" />
+                </button>
+              </div>
             </div>
           </form>
         </div>
