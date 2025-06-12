@@ -163,11 +163,11 @@ export default function ChatPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Chat messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-15 pb-20">
+         <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-20">
           {messages.map((message, i) => (
             <div
               key={i}
-              className={`flex items-start space-x-4 ${
+              className={`flex items-start space-x-4 mb-6 ${
                 message.role === 'user' ? 'justify-end' : 'justify-start'
               }`}
             >
