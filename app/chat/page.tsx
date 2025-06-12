@@ -163,7 +163,7 @@ export default function ChatPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Chat messages */}
-         <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-20">
+         <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-32">
           {messages.map((message, i) => (
             <div
               key={i}
@@ -217,7 +217,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black">
+        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="relative flex items-center bg-gray-800 rounded-xl">
               <textarea
@@ -231,8 +231,8 @@ export default function ChatPage() {
                   }
                 }}
                 placeholder="Share your thoughts..."
-                 className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[100px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
-                style={{ height: '10px' }}
+                className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
+                style={{ height: '44px' }}
                 rows={1}
                 disabled={isLoading}
               />
