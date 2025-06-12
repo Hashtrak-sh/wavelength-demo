@@ -231,7 +231,7 @@ export default function ChatPage() {
                   }
                 }}
                 placeholder="Share your thoughts..."
-                className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
+                className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent whitespace-pre-wrap break-words"
                 style={{ height: '44px' }}
                 rows={1}
                 disabled={isLoading}
