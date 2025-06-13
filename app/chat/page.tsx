@@ -159,9 +159,9 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-[100dvh] bg-black">
+    <div className="flex h-[100dvh] bg-black overflow-x-hidden">
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full">
         {/* Chat messages */}
          <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-32">
           {messages.map((message, i) => (
@@ -172,21 +172,23 @@ export default function ChatPage() {
               }`}
             >
               {message.role === 'assistant' && (
-                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
                   <span className="text-black text-sm">wL</span>
                 </div>
               )}
               <div
-                 className={`relative max-w-[80%] rounded-2xl px-4 py-3 whitespace-pre-wrap break-words overflow-x-hidden ${
+                 className={`relative max-w-[80%] rounded-2xl px-4 py-3 whitespace-pre-wrap break-words ${
                   message.role === 'user'
                     ? 'bg-white text-black'
                     : 'bg-gray-800 text-white'
                 }`}
               >
+                <div className="overflow-hidden">
                 {message.content}
+                  </div>
               </div>
               {message.role === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
                   <span className="text-white text-sm">Me</span>
                 </div>
               )}
@@ -217,7 +219,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+       <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
             <div className="relative flex items-center bg-gray-800 rounded-xl">
               <textarea
@@ -231,7 +233,7 @@ export default function ChatPage() {
                   }
                 }}
                 placeholder="Share your thoughts..."
-                className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent whitespace-pre-wrap break-words"
+                className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
                 style={{ height: '44px' }}
                 rows={1}
                 disabled={isLoading}
