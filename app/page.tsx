@@ -11,7 +11,7 @@ export default function Home() {
       <div className="flex flex-col items-center mt-[10vh] px-4 w-full max-w-4xl mx-auto">
         <h1 
           style={{ fontFamily: 'Poppins, sans-serif' }}
-          className="text-4xl md:text-5xl font-light mb-8 md:mb-12 text-center">Let's set you up! 
+          className="text-4xl md:text-5xl font-light mb-8 md:mb-12 text-center">Let's Set You Up! 
         </h1>
         <p className="text-xl md:text-3xl text-gray-400 italic mb-8 md:mb-12 text-center">only to people matching your wavelength</p>
         <button
