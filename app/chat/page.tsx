@@ -29,7 +29,7 @@ const MAX_RETRIES = 2;
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Hi! I'm Ishaan. I help people find their wavelength through simple chats, not boring forms. Want to talk? It'll be fun!"
+  content: "Hey, I’m Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let’s find someone on your wavelength?"
 };
 
 export default function ChatPage() {
