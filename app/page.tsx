@@ -18,7 +18,7 @@ export default function Home() {
           onClick={() => router.push('/chat')}
           className="border border-white rounded-full px-6 md:px-8 py-2 md:py-3 text-lg md:text-xl hover:bg-white hover:text-black transition-colors italic mb-8 md:mb-12"
         >
-          Let's chat? (Just 5 mins!) 
+          Let's chat for 5 mins? 
         </button>
 
         <div className="relative w-[200px] md:w-[300px] h-[150px] md:h-[200px]">
