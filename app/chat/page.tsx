@@ -7,6 +7,17 @@ import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { useToast } from "@/hooks/use-toast";
 import { chatService } from '@/lib/supabase-service';
 
+const formatMessageContent = (content: string) => {
+  // Replace **text** with bold spans
+  return content.split(/(\*\*[^*]+\*\*)/).map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      // Remove the ** and wrap in bold span
+      const text = part.slice(2, -2);
+      return <span key={index} className="font-bold">{text}</span>;
+    }
+    return part;
+  });
+};
 
 type Message = {
   role: 'user' | 'assistant';
@@ -184,7 +195,7 @@ export default function ChatPage() {
                 }`}
               >
                 <div className="overflow-hidden">
-                {message.content}
+                {formatMessageContent(message.content)}
                   </div>
               </div>
               {message.role === 'user' && (
