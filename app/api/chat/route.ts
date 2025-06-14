@@ -42,6 +42,8 @@ Use clear bullet points and include:
 - A Hindi song that matches their current emotional vibe
 
 Tone should feel personal, grounded, and caring — like a close friend reflecting back what they’ve understood. Avoid flattery. Do not repeat what the user already said — infer deeper meaning.
+
+Make sure you start the summary with this text :- Here's what I inferred so far..
 `;
 
 export async function POST(req: Request) {
