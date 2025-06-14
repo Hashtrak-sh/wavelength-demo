@@ -33,19 +33,6 @@ Before closing, ask if they’d like a summary. If yes, share bullet points:
 
 End by asking if they’d like to keep chatting.`;
 
-const SUMMARY_PROMPT = `Based on the conversation so far, write a short, emotionally intelligent summary of the user.
-
-Use clear bullet points and include:
-
-- One insight they haven’t said themselves
-- One insight about the kind of partner they need which they haven't articulated themselves
-- A Hindi song that matches their current emotional vibe
-
-Tone should feel personal, grounded, and caring — like a close friend reflecting back what they’ve understood. Avoid flattery. Do not repeat what the user already said — infer deeper meaning.
-
-Make sure you strictly start the summary with this text :- Here's what I inferred so far..
-`;
-
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
