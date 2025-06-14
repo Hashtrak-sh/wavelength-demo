@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     
     // Then, get the final message response
     const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
+      model: "gpt-4o",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages.map((msg: any) => ({
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
           content: msg.content
         }))
       ],
-      temperature: 0.7,
+      temperature: 0.3,
       max_tokens: 500,
       top_p: 1,
       frequency_penalty: 0,
