@@ -13,12 +13,12 @@ export default function Home() {
           style={{ fontFamily: 'Poppins, sans-serif' }}
           className="text-4xl md:text-5xl font-light mb-8 md:mb-12 text-center">Let's Set You Up! 
         </h1>
-        <p className="text-xl md:text-3xl text-gray-400 italic mb-8 md:mb-12 text-center">only to people matching your wavelength</p>
+        <p className="text-xl md:text-3xl text-gray-400 italic mb-8 md:mb-12 text-center">An AI that gets your wavelength & connects you to people on it</p>
         <button
           onClick={() => router.push('/chat')}
           className="border border-white rounded-full px-6 md:px-8 py-2 md:py-3 text-lg md:text-xl hover:bg-white hover:text-black transition-colors italic mb-8 md:mb-12"
         >
-          Let's chat for 5 mins? 
+          Got 10 mins to chat? 
         </button>
 
         <div className="relative w-[200px] md:w-[300px] h-[150px] md:h-[200px]">
