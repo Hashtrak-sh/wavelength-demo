@@ -56,7 +56,7 @@ export async function POST(req: Request) {
           content: msg.content
         }))
       ],
-      temperature: 0.9,
+      temperature: 1.5,
       max_tokens: 500,
       top_p: 1,
       frequency_penalty: 0,
