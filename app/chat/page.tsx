@@ -24,8 +24,6 @@ type Message = {
   content: string;
 };
 
-const TIMEOUT_MS = 15000; // 15 seconds
-const MAX_RETRIES = 2;
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
@@ -69,7 +67,7 @@ export default function ChatPage() {
         } else {
           setMessages([INITIAL_MESSAGE]);
           // Save initial message to Supabase
-          await chatService.saveMessage({
+          await chatService.saveMessageWithRetry({
             session_id: session.id,
             message: INITIAL_MESSAGE.content,
             role: INITIAL_MESSAGE.role
@@ -110,16 +108,51 @@ export default function ChatPage() {
     setIsLoading(true);
     setError(null);
 
+    const fetchWithRetry = async (
+      url: string,
+      options: RequestInit = {},
+      retries = 3,
+      delay = 1000, // initial delay in ms
+      backoffFactor = 2
+    ): Promise<Response> => {
+      let attempt = 0;
+    
+      while (attempt <= retries) {
+        try {
+          const response = await fetch(url, options);
+    
+          if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(`HTTP error ${response.status}: ${errorBody}`);
+          }
+    
+          return response;
+        } catch (error) {
+          attempt++;
+    
+          if (attempt > retries) {
+            throw error;
+          }
+    
+          console.warn(`Retrying ${url}... (attempt ${attempt})`);
+          await new Promise((res) => setTimeout(res, delay * Math.pow(backoffFactor, attempt - 1)));
+        }
+      }
+    
+      throw new Error('Unexpected error in fetchWithRetry');
+    };
+    
+
     try {
       // Save user message to Supabase
-      await chatService.saveMessage({
+      await chatService.saveMessageWithRetry({
         session_id: sessionId,
         message: userMessage.content,
         role: userMessage.role
       });
 
       // Get AI response
-      const response = await fetch('/api/chat', {
+      const response = await fetchWithRetry('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +172,7 @@ export default function ChatPage() {
       setMessages(prev => [...prev, assistantMessage]);
 
       // Save assistant message to Supabase
-      await chatService.saveMessage({
+      await chatService.saveMessageWithRetry({
         session_id: sessionId,
         message: data.content,
         role: data.role
@@ -149,16 +182,7 @@ export default function ChatPage() {
       if (data.generatesSummary && data.summary) {
         await chatService.updateSessionSummary(sessionId, data.summary);
         
-        toast({
-          title: "Summary Generated!",
-          description: "Your wavelength summary is now available.",
-          duration: 5000,
-        });
-
-        // Navigate to profile page
-        setTimeout(() => {
-          window.location.href = '/profile?tab=Your%20Wavelength';
-        }, 1500);
+     
       }
     } catch (error: any) {
       console.error('Error:', error);

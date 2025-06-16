@@ -96,7 +96,47 @@ export const chatService = {
       throw error;
     }
   },
-
+  async saveMessageWithRetry(
+    message: Omit<ChatMessage, 'id' | 'created_at'>,
+    retries = 3,
+    delay = 1000, // initial delay in ms
+    backoffFactor = 2
+  ): Promise<ChatMessage> {
+    let attempt = 0;
+  
+    while (attempt <= retries) {
+      try {
+        const { data, error } = await supabase
+          .from('chat_messages')
+          .insert(message)
+          .select()
+          .single();
+  
+        if (error) {
+          console.error('Error saving message (attempt', attempt + 1, '):', error);
+          throw new Error(`Failed to save message: ${error.message}`);
+        }
+        if (!data) {
+          throw new Error('No message data returned');
+        }
+  
+        return data;
+      } catch (error) {
+        attempt++;
+  
+        if (attempt > retries) {
+          console.error('All retries failed for saveMessage');
+          throw error;
+        }
+  
+        console.warn(`Retrying saveMessage (attempt ${attempt})...`);
+        await new Promise((res) => setTimeout(res, delay * Math.pow(backoffFactor, attempt - 1)));
+      }
+    }
+  
+    throw new Error('Unexpected error in saveMessageWithRetry');
+  },
+  
   // Save a message to the chat session
   async saveMessage(message: Omit<ChatMessage, 'id' | 'created_at'>): Promise<ChatMessage> {
     try {
