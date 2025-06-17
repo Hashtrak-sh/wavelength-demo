@@ -22,9 +22,9 @@ const formatMessageContent = (content: string) => {
 type Message = {
   role: 'user' | 'assistant';
   content: string;
-  summary?: string;
   isSummary?: boolean;
   generatesSummary?: boolean;
+  summary?: string;
 };
 
 type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'completed';
@@ -167,7 +167,6 @@ export default function ChatPage() {
           messages: [...messages, userMessage],
         }),
       });
-         
          
       if (!response.ok) {
         const data = await response.json();
@@ -317,9 +316,9 @@ export default function ChatPage() {
       return (
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gray-800 rounded-xl p-4">
+            <div className="bg-black-800 rounded-xl p-4 text-center">
               <p className="mb-3 font-medium text-white">Would you like to provide WhatsApp number?</p>
-              <div className="flex space-x-3">
+              <div className="flex space-x-3 justify-center">
                 <button
                   onClick={handleWhatsAppYes}
                   className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
@@ -343,15 +342,15 @@ export default function ChatPage() {
       return (
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gray-800 rounded-xl p-4">
+            <div className="bg-black-800 rounded-xl p-4 text-center">
               <p className="mb-3 font-medium text-white">Please enter your WhatsApp number:</p>
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 justify-center">
                 <input
                   type="tel"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="(+91)1234567890"
-                  className="flex-1 px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
+                  className="flex-1 max-w-xs px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handlePhoneSubmit();
@@ -376,7 +375,7 @@ export default function ChatPage() {
       return (
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gray-800 rounded-xl p-4">
+            <div className="bg-black-800 rounded-xl p-4 text-center">
               <p className="mb-3 font-medium text-white">Would you like to continue chatting?</p>
               <button
                 onClick={handleContinueChat}
@@ -399,44 +398,6 @@ export default function ChatPage() {
       <div className="flex-1 flex flex-col w-full">
         {/* Chat messages */}
          <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-32">
-          {messages.map((message, i) => {
-            // Check if this is a summary message that should trigger special rendering
-            if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
-              return renderSummaryMessage(message, i);
-            }
-            
-            // Regular message rendering
-            return (
-              <div
-                key={i}
-                className={`flex items-start space-x-4 mb-6 ${
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                }`}
-              >
-                {message.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
-                    <span className="text-black text-sm">wL</span>
-                  </div>
-                )}
-                <div
-                   className={`relative max-w-[80%] rounded-2xl px-4 py-3 whitespace-pre-wrap break-words ${
-                    message.role === 'user'
-                      ? 'bg-white text-black'
-                      : 'bg-gray-800 text-white'
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                  {formatMessageContent(message.content)}
-                    </div>
-                </div>
-                {message.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
-                    <span className="text-white text-sm">Me</span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
           {messages.map((message, i) => {
             // Check if this is a summary message that should trigger special rendering
             if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
