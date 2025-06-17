@@ -21,9 +21,6 @@ const formatMessageContent = (content: string) => {
 
 type Message = {
   role: 'user' | 'assistant';
-  content: string;
-  isSummary?: boolean;
-  generatesSummary?: boolean;
   summary?: string;
   isSummary?: boolean;
   generatesSummary?: boolean;
@@ -31,11 +28,9 @@ type Message = {
 };
 
 type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'completed';
-type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'completed';
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Hey, I'm Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
   content: "Hey, I'm Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
 };
 
@@ -46,8 +41,6 @@ export default function ChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [whatsappFlowState, setWhatsappFlowState] = useState<WhatsAppFlowState | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [whatsappFlowState, setWhatsappFlowState] = useState<WhatsAppFlowState | null>(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -188,12 +181,6 @@ export default function ChatPage() {
         generatesSummary: data.generatesSummary,
         summary: data.summary
       };
-      const assistantMessage: Message = { 
-        role: data.role, 
-        content: data.content,
-        generatesSummary: data.generatesSummary,
-        summary: data.summary
-      };
       setMessages(prev => [...prev, assistantMessage]);
 
       // Save assistant message to Supabase
@@ -206,8 +193,6 @@ export default function ChatPage() {
       // Check if this is the last message that generates the summary
       if (data.generatesSummary && data.summary) {
         await chatService.updateSessionSummary(sessionId, data.summary);
-        // Trigger WhatsApp flow
-        setWhatsappFlowState('ask-whatsapp');
         // Trigger WhatsApp flow
         setWhatsappFlowState('ask-whatsapp');
       }
