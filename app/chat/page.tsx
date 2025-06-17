@@ -22,12 +22,16 @@ const formatMessageContent = (content: string) => {
 type Message = {
   role: 'user' | 'assistant';
   content: string;
+  isSummary?: boolean;
+  generatesSummary?: boolean;
+  summary?: string;
 };
 
+type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'completed';
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Hey, I’m Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let’s find someone on your wavelength?"
+  content: "Hey, I'm Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
 };
 
 export default function ChatPage() {
@@ -37,6 +41,8 @@ export default function ChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [whatsappFlowState, setWhatsappFlowState] = useState<WhatsAppFlowState | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
@@ -161,14 +167,19 @@ export default function ChatPage() {
           messages: [...messages, userMessage],
         }),
       });
-
+         
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || 'Failed to get response');
       }
 
       const data = await response.json();
-      const assistantMessage = { role: data.role, content: data.content };
+      const assistantMessage: Message = { 
+        role: data.role, 
+        content: data.content,
+        generatesSummary: data.generatesSummary,
+        summary: data.summary
+      };
       setMessages(prev => [...prev, assistantMessage]);
 
       // Save assistant message to Supabase
@@ -181,8 +192,8 @@ export default function ChatPage() {
       // Check if this is the last message that generates the summary
       if (data.generatesSummary && data.summary) {
         await chatService.updateSessionSummary(sessionId, data.summary);
-        
-     
+        // Trigger WhatsApp flow
+        setWhatsappFlowState('ask-whatsapp');
       }
     } catch (error: any) {
       console.error('Error:', error);
@@ -193,42 +204,238 @@ export default function ChatPage() {
     }
   };
 
+  const handleWhatsAppYes = () => {
+    setWhatsappFlowState('phone-input');
+  };
+
+  const handleWhatsAppNo = () => {
+    setWhatsappFlowState('ask-continue');
+  };
+
+  const handlePhoneSubmit = async () => {
+    if (phoneNumber.trim() && sessionId) {
+      // Clean and format the phone number for database storage
+      const cleanPhoneNumber = phoneNumber.replace(/[\s\-\(\)\+]/g, '');
+      
+      // Save contact number to chat_sessions table
+      try {
+        await chatService.updateSessionContactNumber(sessionId, cleanPhoneNumber);
+        console.log('Contact number saved to session:', cleanPhoneNumber);
+      } catch (error) {
+        console.error('Error saving contact number to session:', error);
+        // Continue with the flow even if saving fails
+      }
+      
+      // Add user's phone number as a message (keep original format for display)
+      const phoneMessage: Message = {
+        role: 'user',
+        content: `My WhatsApp number is: ${phoneNumber}`
+      };
+      setMessages(prev => [...prev, phoneMessage]);
+      
+      // Save phone number message to Supabase
+      try {
+        await chatService.saveMessageWithRetry({
+          session_id: sessionId,
+          message: phoneMessage.content,
+          role: phoneMessage.role
+        });
+      } catch (error) {
+        console.error('Error saving phone number:', error);
+      }
+      
+      // Add confirmation message
+      const confirmMessage: Message = {
+        role: 'assistant',
+        content: "Great! I've noted your WhatsApp number. Let's continue our conversation!"
+      };
+      setMessages(prev => [...prev, confirmMessage]);
+      
+      // Save confirmation message to Supabase
+      try {
+        await chatService.saveMessageWithRetry({
+          session_id: sessionId,
+          message: confirmMessage.content,
+          role: confirmMessage.role
+        });
+      } catch (error) {
+        console.error('Error saving confirmation message:', error);
+      }
+      
+      setPhoneNumber('');
+      setWhatsappFlowState('completed');
+    }
+  };
+
+  const handleContinueChat = async () => {
+    const continueMessage: Message = {
+      role: 'assistant',
+      content: "No worries! Let's continue our conversation. What else would you like to talk about?"
+    };
+    setMessages(prev => [...prev, continueMessage]);
+    
+    // Save continue message to Supabase
+    if (sessionId) {
+      try {
+        await chatService.saveMessageWithRetry({
+          session_id: sessionId,
+          message: continueMessage.content,
+          role: continueMessage.role
+        });
+      } catch (error) {
+        console.error('Error saving continue message:', error);
+      }
+    }
+    
+    setWhatsappFlowState('completed');
+  };
+
+  const renderSummaryMessage = (message: Message, index: number) => {
+    // Default summary message display (no WhatsApp UI here anymore)
+    return (
+      <div key={index} className="flex items-start space-x-4 mb-6 justify-start">
+        <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
+          <span className="text-black text-sm">wL</span>
+        </div>
+        <div className="relative max-w-[80%] rounded-2xl px-4 py-3 bg-gray-800 text-white">
+          <div className="overflow-hidden">
+            {formatMessageContent(message.content)}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // New function to render WhatsApp modal in place of chat input
+  const renderWhatsAppModal = () => {
+    if (!whatsappFlowState || whatsappFlowState === 'completed') {
+      return null;
+    }
+    
+    if (whatsappFlowState === 'ask-whatsapp') {
+      return (
+        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gray-800 rounded-xl p-4">
+              <p className="mb-3 font-medium text-white">Would you like to provide WhatsApp number?</p>
+              <div className="flex space-x-3">
+                <button
+                  onClick={handleWhatsAppYes}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={handleWhatsAppNo}
+                  className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (whatsappFlowState === 'phone-input') {
+      return (
+        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gray-800 rounded-xl p-4">
+              <p className="mb-3 font-medium text-white">Please enter your WhatsApp number:</p>
+              <div className="flex space-x-2">
+                <input
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="(+91)1234567890"
+                  className="flex-1 px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handlePhoneSubmit();
+                    }
+                  }}
+                />
+                <button
+                  onClick={handlePhoneSubmit}
+                  disabled={!phoneNumber.trim()}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (whatsappFlowState === 'ask-continue') {
+      return (
+        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gray-800 rounded-xl p-4">
+              <p className="mb-3 font-medium text-white">Would you like to continue chatting?</p>
+              <button
+                onClick={handleContinueChat}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+              >
+                Yes, let's continue
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="flex h-[100dvh] bg-black overflow-x-hidden">
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col w-full">
         {/* Chat messages */}
          <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-32">
-          {messages.map((message, i) => (
-            <div
-              key={i}
-              className={`flex items-start space-x-4 mb-6 ${
-                message.role === 'user' ? 'justify-end' : 'justify-start'
-              }`}
-            >
-              {message.role === 'assistant' && (
-                <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
-                  <span className="text-black text-sm">wL</span>
-                </div>
-              )}
+          {messages.map((message, i) => {
+            // Check if this is a summary message that should trigger special rendering
+            if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
+              return renderSummaryMessage(message, i);
+            }
+            
+            // Regular message rendering
+            return (
               <div
-                 className={`relative max-w-[80%] rounded-2xl px-4 py-3 whitespace-pre-wrap break-words ${
-                  message.role === 'user'
-                    ? 'bg-white text-black'
-                    : 'bg-gray-800 text-white'
+                key={i}
+                className={`flex items-start space-x-4 mb-6 ${
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
                 }`}
               >
-                <div className="overflow-hidden">
-                {formatMessageContent(message.content)}
+                {message.role === 'assistant' && (
+                  <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
+                    <span className="text-black text-sm">wL</span>
                   </div>
-              </div>
-              {message.role === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
-                  <span className="text-white text-sm">Me</span>
+                )}
+                <div
+                   className={`relative max-w-[80%] rounded-2xl px-4 py-3 whitespace-pre-wrap break-words ${
+                    message.role === 'user'
+                      ? 'bg-white text-black'
+                      : 'bg-gray-800 text-white'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                  {formatMessageContent(message.content)}
+                    </div>
                 </div>
-              )}
-            </div>
-          ))}
+                {message.role === 'user' && (
+                  <div className="w-8 h-8 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
+                    <span className="text-white text-sm">Me</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
           {isLoading && (
             <div className="flex items-start space-x-4">
               <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
@@ -254,39 +461,43 @@ export default function ChatPage() {
         </div>
 
         {/* Input form */}
-       <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-            <div className="relative flex items-center bg-gray-800 rounded-xl">
-              <textarea
-                ref={textareaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit(e);
-                  }
-                }}
-                placeholder="Share your thoughts..."
-                className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
-                style={{ height: '44px' }}
-                rows={1}
-                disabled={isLoading}
-              />
-              <div className="absolute right-3 flex items-center h-full">
-                <button
-                  type="submit"
-                  disabled={isLoading || !input.trim()}
-                  className="flex items-center justify-center text-white p-1.5 rounded-lg
-                           disabled:opacity-50 disabled:cursor-not-allowed
-                           enabled:bg-purple-600 enabled:hover:bg-purple-700 transition-colors"
-                >
-                  <PaperAirplaneIcon className="h-5 w-5" />
-                </button>
+        {whatsappFlowState && whatsappFlowState !== 'completed' ? (
+          renderWhatsAppModal()
+        ) : (
+          <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+            <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+              <div className="relative flex items-center bg-gray-800 rounded-xl">
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSubmit(e);
+                    }
+                  }}
+                  placeholder="Share your thoughts..."
+                  className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
+                  style={{ height: '44px' }}
+                  rows={1}
+                  disabled={isLoading}
+                />
+                <div className="absolute right-3 flex items-center h-full">
+                  <button
+                    type="submit"
+                    disabled={isLoading || !input.trim()}
+                    className="flex items-center justify-center text-white p-1.5 rounded-lg
+                             disabled:opacity-50 disabled:cursor-not-allowed
+                             enabled:bg-purple-600 enabled:hover:bg-purple-700 transition-colors"
+                  >
+                    <PaperAirplaneIcon className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );
