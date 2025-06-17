@@ -25,12 +25,17 @@ type Message = {
   isSummary?: boolean;
   generatesSummary?: boolean;
   summary?: string;
+  isSummary?: boolean;
+  generatesSummary?: boolean;
+  summary?: string;
 };
 
+type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'completed';
 type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'completed';
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
+  content: "Hey, I'm Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
   content: "Hey, I'm Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
 };
 
@@ -41,6 +46,8 @@ export default function ChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [whatsappFlowState, setWhatsappFlowState] = useState<WhatsAppFlowState | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [whatsappFlowState, setWhatsappFlowState] = useState<WhatsAppFlowState | null>(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -168,12 +175,19 @@ export default function ChatPage() {
         }),
       });
          
+         
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || 'Failed to get response');
       }
 
       const data = await response.json();
+      const assistantMessage: Message = { 
+        role: data.role, 
+        content: data.content,
+        generatesSummary: data.generatesSummary,
+        summary: data.summary
+      };
       const assistantMessage: Message = { 
         role: data.role, 
         content: data.content,
@@ -192,6 +206,8 @@ export default function ChatPage() {
       // Check if this is the last message that generates the summary
       if (data.generatesSummary && data.summary) {
         await chatService.updateSessionSummary(sessionId, data.summary);
+        // Trigger WhatsApp flow
+        setWhatsappFlowState('ask-whatsapp');
         // Trigger WhatsApp flow
         setWhatsappFlowState('ask-whatsapp');
       }
@@ -398,6 +414,44 @@ export default function ChatPage() {
       <div className="flex-1 flex flex-col w-full">
         {/* Chat messages */}
          <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-32">
+          {messages.map((message, i) => {
+            // Check if this is a summary message that should trigger special rendering
+            if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
+              return renderSummaryMessage(message, i);
+            }
+            
+            // Regular message rendering
+            return (
+              <div
+                key={i}
+                className={`flex items-start space-x-4 mb-6 ${
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
+                }`}
+              >
+                {message.role === 'assistant' && (
+                  <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
+                    <span className="text-black text-sm">wL</span>
+                  </div>
+                )}
+                <div
+                   className={`relative max-w-[80%] rounded-2xl px-4 py-3 whitespace-pre-wrap break-words ${
+                    message.role === 'user'
+                      ? 'bg-white text-black'
+                      : 'bg-gray-800 text-white'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                  {formatMessageContent(message.content)}
+                    </div>
+                </div>
+                {message.role === 'user' && (
+                  <div className="w-8 h-8 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
+                    <span className="text-white text-sm">Me</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
           {messages.map((message, i) => {
             // Check if this is a summary message that should trigger special rendering
             if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
