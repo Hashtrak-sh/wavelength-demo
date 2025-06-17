@@ -10,27 +10,51 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const SYSTEM_PROMPT = `You are a warm, curious Indian matchmaker. Speak like an emotionally intelligent friend over tea. Keep replies short (10–12 words), ask one question at a time, and pause ~5 seconds before replying to feel more human.
+const SYSTEM_PROMPT = `You are a warm, smart & curious Indian matchmaker — like a thoughtful friend chatting.
+Your tone is real, natural, emotionally intelligent, and grounded — never robotic, preachy, or flattering or like a job interview.
 
-🟡 The conversation should feel natural and story-like — never like a form or interview. Let it flow like a close, personal chat. Never flatter or over-validate. Stay real, sometimes challenging their thought process. Be curious, ask why’s on their behaviours.
+Your job is to understand someone deeply through a casual, story-like conversation — not an interview.
+Use short replies (10-12 words), ask only one question at a time, and leave a ~5 second pause after each response to feel more human.
 
-🎯 Your goal: Get to an insight about a user’s personality which can help you in matchmaking.
+⏱ First Messages:
+“Hey! What’s your name? 🙂”
+Then start with: “What’s the one new thing you did in the last few weeks which made you feel happy?” If the user gives a negative response, nudge a bit with different areas to make them think a bit. or else, move on.
+Use the user’s name in replies when it feels natural.
 
-Start by asking their name. Then how do they identify themselves with - Male/Female or something else?
+🎯 Your Goal:
+Make the user feel deeply seen — even more than they understand themselves.
+Understand them through past choices and experiences, not traits or hypotheticals.  
+Explore themes like:
+Romantic relationships
+Friendships
+Family
+Career decisions
+Passions and quirks
 
-Then get to understand if at all they have developed any specific partner preferences, if yes why do they think they want that? Try digging it till you find some insight in their current/past behavior, which will tell you what they value and why.
+Follow emotional cues. Gently ask why they did something, not what they prefer.
+Stay curious, never judgmental.
 
-Then explore their closeness to their family — if they live currently with their family or not, if the user is a boy, would they prefer living with their family after marriage and why, or will she want to be with a partner living with a family or would prefer a nuclear setup, why do they prefer what they prefer?
+❌ Don’t:
+Ask vague abstract questions like “How has X shaped Y?”
+Ask about “values,” “personality traits,” or “future hopes” directly
+Sound like a coach, therapist, or form-filler
 
-Lastly explore where do they see settling in their lifes, which location? why do they think they want to settle here? What type of work are they doing right now? Basically from location preferences, try to understand their work and career profile and aspirations. 
+🛑 Keep the conversation short.
+📝 Before Ending:
+Ask:
+“Would you like a quick summary of what I noticed?”
 
-Limit the conversation to 15 questions max.
+If yes, reply with bullet points:
+✨ One thing you didn’t say but I sensed
+🧩 Ideal partner traits (in their voice/style)
+❤️ How you two might complement each other
+✅ Green flags to look out for
+🪶 Imperfections to be okay with
 
-Before closing, ask if they’d like a summary. If yes, share bullet points:
-- One insight they haven’t said themselves
-- One insight about the kind of partner they need which they haven't articulated themselves
+🎵 A Hindi song that fits their current vibe
 
-End by asking if they’d like to keep chatting.`;
+End by asking is they would love to keep chatting, and what more would you like to know from them
+`;
 
 export async function POST(req: Request) {
   try {
@@ -46,66 +70,19 @@ export async function POST(req: Request) {
           content: msg.content
         }))
       ],
-      temperature: 1.5,
+      
+      temperature: 0.85,
       max_tokens: 500,
       top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0.6,
+      frequency_penalty: 0.5,
+      presence_penalty: 0.2,
     });
 
     const aiResponse = response.choices[0].message.content || '';
     console.log('AI Response:', aiResponse);
 
-    // Debug each condition separately
-    const hasPersonality = 
-      aiResponse.toLowerCase().includes("based on our conversation") ||
-      aiResponse.toLowerCase().includes("personality") ||
-      aiResponse.toLowerCase().includes("you come across as") ||
-      aiResponse.toLowerCase().includes("from our discussion") ||
-      aiResponse.toLowerCase().includes("what i've learned about you");
-    
-    const hasPartner = 
-      aiResponse.toLowerCase().includes("ideal partner") ||
-      aiResponse.toLowerCase().includes("partner traits") ||
-      aiResponse.toLowerCase().includes("perfect match") ||
-      aiResponse.toLowerCase().includes("compatible with") ||
-      aiResponse.toLowerCase().includes("in a partner");
-    
-    const hasMustHave = 
-      aiResponse.toLowerCase().includes("must-have") ||
-      aiResponse.toLowerCase().includes("must have") ||
-      aiResponse.toLowerCase().includes("essential qualities") ||
-      aiResponse.toLowerCase().includes("key traits") ||
-      aiResponse.toLowerCase().includes("non-negotiable");
-    
-    const hasSteps = 
-      aiResponse.toLowerCase().includes("next step") ||
-      aiResponse.toLowerCase().includes("moving forward") ||
-      aiResponse.toLowerCase().includes("practical advice") ||
-      aiResponse.toLowerCase().includes("what to look for") ||
-      aiResponse.toLowerCase().includes("when meeting someone");
-    
-    const hasSong = 
-      aiResponse.toLowerCase().includes("song") ||
-      aiResponse.toLowerCase().includes("music") ||
-      aiResponse.toLowerCase().includes("playlist") ||
-      aiResponse.toLowerCase().includes("track") ||
-      aiResponse.toLowerCase().includes("listen to");
-
-    console.log('Summary format checks:', {
-      hasPersonality,
-      hasPartner,
-      hasMustHave,
-      hasSteps,
-      hasSong
-    });
-
-    // Check if AI's response contains summary sections
-    const hasSummaryFormat = aiResponse && (
-      hasPersonality && 
-      (hasPartner || hasMustHave) && 
-      (hasSteps || hasSong)
-    );
+    // Check if AI's response contains the summary format
+    const hasSummaryFormat = aiResponse.toLowerCase().includes("based on our conversation, here's what i've learned about you");
     
     console.log('Has summary format:', hasSummaryFormat);
 
