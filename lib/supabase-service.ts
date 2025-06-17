@@ -201,6 +201,26 @@ export const chatService = {
     }
   },
 
+  // Update session contact number
+  async updateSessionContactNumber(sessionId: string, contactNumber: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('chat_sessions')
+        .update({ 
+          contact_number: contactNumber
+        })
+        .eq('id', sessionId);
+
+      if (error) {
+        console.error('Error updating contact number:', error);
+        throw new Error(`Failed to update contact number: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error in updateSessionContactNumber:', error);
+      throw error;
+    }
+  },
+
   // Get session summary
   async getSessionSummary(sessionId: string): Promise<string | null> {
     try {

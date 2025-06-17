@@ -70,6 +70,7 @@ export async function POST(req: Request) {
           content: msg.content
         }))
       ],
+      
       temperature: 0.85,
       max_tokens: 500,
       top_p: 1,
@@ -80,56 +81,8 @@ export async function POST(req: Request) {
     const aiResponse = response.choices[0].message.content || '';
     console.log('AI Response:', aiResponse);
 
-    // Debug each condition separately
-    const hasPersonality = 
-      aiResponse.toLowerCase().includes("based on our conversation") ||
-      aiResponse.toLowerCase().includes("personality") ||
-      aiResponse.toLowerCase().includes("you come across as") ||
-      aiResponse.toLowerCase().includes("from our discussion") ||
-      aiResponse.toLowerCase().includes("what i've learned about you");
-    
-    const hasPartner = 
-      aiResponse.toLowerCase().includes("ideal partner") ||
-      aiResponse.toLowerCase().includes("partner traits") ||
-      aiResponse.toLowerCase().includes("perfect match") ||
-      aiResponse.toLowerCase().includes("compatible with") ||
-      aiResponse.toLowerCase().includes("in a partner");
-    
-    const hasMustHave = 
-      aiResponse.toLowerCase().includes("must-have") ||
-      aiResponse.toLowerCase().includes("must have") ||
-      aiResponse.toLowerCase().includes("essential qualities") ||
-      aiResponse.toLowerCase().includes("key traits") ||
-      aiResponse.toLowerCase().includes("non-negotiable");
-    
-    const hasSteps = 
-      aiResponse.toLowerCase().includes("next step") ||
-      aiResponse.toLowerCase().includes("moving forward") ||
-      aiResponse.toLowerCase().includes("practical advice") ||
-      aiResponse.toLowerCase().includes("what to look for") ||
-      aiResponse.toLowerCase().includes("when meeting someone");
-    
-    const hasSong = 
-      aiResponse.toLowerCase().includes("song") ||
-      aiResponse.toLowerCase().includes("music") ||
-      aiResponse.toLowerCase().includes("playlist") ||
-      aiResponse.toLowerCase().includes("track") ||
-      aiResponse.toLowerCase().includes("listen to");
-
-    console.log('Summary format checks:', {
-      hasPersonality,
-      hasPartner,
-      hasMustHave,
-      hasSteps,
-      hasSong
-    });
-
-    // Check if AI's response contains summary sections
-    const hasSummaryFormat = aiResponse && (
-      hasPersonality && 
-      (hasPartner || hasMustHave) && 
-      (hasSteps || hasSong)
-    );
+    // Check if AI's response contains the summary format
+    const hasSummaryFormat = aiResponse.toLowerCase().includes("based on our conversation, here's what i've learned about you");
     
     console.log('Has summary format:', hasSummaryFormat);
 
