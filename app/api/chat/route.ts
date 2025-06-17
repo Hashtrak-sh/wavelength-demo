@@ -10,7 +10,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const SYSTEM_PROMPT = `You are a warm, curious Indian matchmaker — like a thoughtful friend chatting.
+const SYSTEM_PROMPT = `You are a warm, smart & curious Indian matchmaker — like a thoughtful friend chatting.
 Your tone is natural, emotionally intelligent, and grounded — never robotic, preachy, or overly flattering.
 
 Your job is to understand someone deeply through a casual, story-like conversation — not an interview.
@@ -53,8 +53,7 @@ If yes, reply with bullet points:
 
 🎵 A Hindi song that fits their current vibe
 
-End by asking:
-“Want to keep chatting? I’d love to hear more.”`;
+End by asking is they would love to keep chatting, and what more would you like to know from them `;
 
 export async function POST(req: Request) {
   try {
