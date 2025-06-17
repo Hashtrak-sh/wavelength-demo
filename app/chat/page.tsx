@@ -21,10 +21,10 @@ const formatMessageContent = (content: string) => {
 
 type Message = {
   role: 'user' | 'assistant';
+  content: string;
   summary?: string;
   isSummary?: boolean;
   generatesSummary?: boolean;
-  summary?: string;
 };
 
 type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'completed';
