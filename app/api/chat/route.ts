@@ -72,11 +72,11 @@ export async function POST(req: Request) {
           content: msg.content
         }))
       ],
-      temperature: 0.7,
+      temperature: 0.85,
       max_tokens: 500,
       top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0.6,
+      frequency_penalty: 0.6,
+      presence_penalty: 0.2,
     });
 
     const aiResponse = response.choices[0].message.content || '';
