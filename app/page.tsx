@@ -14,7 +14,7 @@ export default function Home() {
           src="/main-bg.jpg"
           alt="Background"
           fill
-          style={{ objectFit: 'cover', objectPosition: 'center 45%' }}
+          style={{ objectFit: 'cover', objectPosition: 'center 0.5%' }}
           priority
           className="opacity-90"
         />
@@ -28,7 +28,7 @@ export default function Home() {
           src="/main-bg-mobile.jpg"
           alt="Mobile Background"
           fill
-          style={{ objectFit: 'cover', objectPosition: '45% 40%' }}
+          style={{ objectFit: 'cover', objectPosition:'59% 40%' }}
           priority
           className="opacity-90"
         />
