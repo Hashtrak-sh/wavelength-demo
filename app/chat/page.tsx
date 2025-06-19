@@ -295,7 +295,7 @@ export default function ChatPage() {
     return (
       <div key={index} className="flex items-start space-x-4 mb-6 justify-start">
         <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
-          <span className="text-black text-sm">wL</span>
+          <span className="text-black text-sm">wl</span>
         </div>
         <div className="relative max-w-[80%] rounded-2xl px-4 py-3 bg-gray-800 text-white">
           <div className="overflow-hidden">
@@ -317,7 +317,8 @@ export default function ChatPage() {
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
-              <p className="mb-3 font-medium text-white">Would you like to provide WhatsApp number?</p>
+              <p className="mb-3 font-medium text-white">Basis what we have gathered about you, would you want us to notify about a potential match who matches your wavelength?
+              </p>
               <div className="flex space-x-3 justify-center">
                 <button
                   onClick={handleWhatsAppYes}
@@ -343,7 +344,9 @@ export default function ChatPage() {
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
-              <p className="mb-3 font-medium text-white">Please enter your WhatsApp number:</p>
+             <p className="mb-3 font-medium text-white">
+                Could you share your WhatsApp number for the update? <em>Rest assured we will never spam you!</em>
+             </p>
               <div className="flex space-x-2 justify-center">
                 <input
                   type="tel"
@@ -397,7 +400,7 @@ export default function ChatPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col w-full">
         {/* Chat messages */}
-         <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-32">
+        <div className={`flex-1 overflow-y-auto p-4 space-y-6 ${whatsappFlowState && whatsappFlowState !== 'completed' ? 'pb-48' : 'pb-32'}`}>
           {messages.map((message, i) => {
             // Check if this is a summary message that should trigger special rendering
             if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
@@ -414,7 +417,7 @@ export default function ChatPage() {
               >
                 {message.role === 'assistant' && (
                   <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
-                    <span className="text-black text-sm">wL</span>
+                    <span className="text-black text-sm">wl</span>
                   </div>
                 )}
                 <div
@@ -439,7 +442,7 @@ export default function ChatPage() {
           {isLoading && (
             <div className="flex items-start space-x-4">
               <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                <span className="text-black text-sm">wL</span>
+                <span className="text-black text-sm">wl</span>
               </div>
               <div className="bg-gray-800 text-white px-4 py-3 rounded-2xl">
                 <div className="flex space-x-2">
