@@ -16,10 +16,10 @@ export default function Home() {
           fill
           style={{ objectFit: 'cover', objectPosition: 'center 45%' }}
           priority
-          className="opacity-70"
+          className="opacity-90"
         />
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40" />
+        {/* Light overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/15" />
       </div>
 
       {/* Mobile Background Image */}
@@ -30,10 +30,10 @@ export default function Home() {
           fill
           style={{ objectFit: 'cover', objectPosition: '45% 40%' }}
           priority
-          className="opacity-70"
+          className="opacity-90"
         />
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40" />
+        {/* Light overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/15" />
       </div>
       
       {/* Content */}
@@ -45,7 +45,7 @@ export default function Home() {
         <p className="text-lg md:text-2xl italic mb-6 md:mb-8 text-center drop-shadow-md" style={{ color: '#f5e8d6' }}>An AI that gets your wavelength & connects you better</p>
         <button
           onClick={() => router.push('/chat')}
-          className="border rounded-full px-5 md:px-6 py-2 md:py-2.5 text-base md:text-lg bg-black/20 backdrop-blur-sm transition-all duration-300 italic mb-6 md:mb-8 drop-shadow-lg hover:bg-white hover:text-black"
+          className="border rounded-full px-5 md:px-6 py-2 md:py-2.5 text-base md:text-lg bg-white/10 backdrop-blur-sm transition-all duration-300 italic mb-6 md:mb-8 drop-shadow-lg hover:bg-white hover:text-black"
           style={{ borderColor: '#f5e8d6', color: '#f5e8d6' }}
         >
           Got 10 mins to chat? 
