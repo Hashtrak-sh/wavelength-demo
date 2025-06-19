@@ -31,7 +31,7 @@ type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'comp
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Hey, I'm Wavy! Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
+  content: "Hey, Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
 };
 
 export default function ChatPage() {
