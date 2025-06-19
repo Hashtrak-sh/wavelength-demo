@@ -293,11 +293,11 @@ export default function ChatPage() {
   const renderSummaryMessage = (message: Message, index: number) => {
     // Default summary message display (no WhatsApp UI here anymore)
     return (
-      <div key={index} className="flex items-start space-x-4 mb-6 justify-start">
-        <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
-          <span className="text-black text-sm">wl</span>
+      <div key={index} className="flex items-start space-x-3 mb-4 justify-start">
+        <div className="w-7 h-7 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
+          <span className="text-black text-xs">wl</span>
         </div>
-        <div className="relative max-w-[80%] rounded-2xl px-4 py-3 bg-gray-800 text-white">
+        <div className="relative max-w-[80%] rounded-2xl px-3 py-2 bg-gray-800 text-white text-sm">
           <div className="overflow-hidden">
             {formatMessageContent(message.content)}
           </div>
@@ -317,18 +317,18 @@ export default function ChatPage() {
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
-              <p className="mb-3 font-medium text-white">Basis what we have gathered about you, would you want us to notify about a potential match who matches your wavelength?
+              <p className="mb-3 text-sm text-white">Basis what we have gathered about you, would you want us to notify about a potential match who matches your wavelength?
               </p>
               <div className="flex space-x-3 justify-center">
                 <button
                   onClick={handleWhatsAppYes}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                  className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors"
                 >
                   Yes
                 </button>
                 <button
                   onClick={handleWhatsAppNo}
-                  className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                  className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-colors"
                 >
                   No
                 </button>
@@ -344,7 +344,7 @@ export default function ChatPage() {
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
-             <p className="mb-3 font-medium text-white">
+             <p className="mb-3 text-sm text-white">
                 Could you share your WhatsApp number for the update? <em>Rest assured we will never spam you!</em>
              </p>
               <div className="flex space-x-2 justify-center">
@@ -353,7 +353,7 @@ export default function ChatPage() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="(+91)1234567890"
-                  className="flex-1 max-w-xs px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
+                  className="flex-1 max-w-xs px-3 py-2 bg-gray-700 text-white text-sm rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handlePhoneSubmit();
@@ -363,7 +363,7 @@ export default function ChatPage() {
                 <button
                   onClick={handlePhoneSubmit}
                   disabled={!phoneNumber.trim()}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                  className="px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm rounded-lg transition-colors"
                 >
                   Submit
                 </button>
@@ -379,10 +379,10 @@ export default function ChatPage() {
         <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
-              <p className="mb-3 font-medium text-white">Would you like to continue chatting?</p>
+              <p className="mb-3 text-sm text-white">Would you like to continue chatting?</p>
               <button
                 onClick={handleContinueChat}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+                className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition-colors"
               >
                 Yes, let's continue
               </button>
@@ -400,7 +400,7 @@ export default function ChatPage() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col w-full">
         {/* Chat messages */}
-        <div className={`flex-1 overflow-y-auto p-4 space-y-6 ${whatsappFlowState && whatsappFlowState !== 'completed' ? 'pb-48' : 'pb-32'}`}>
+        <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${whatsappFlowState && whatsappFlowState !== 'completed' ? 'pb-48' : 'pb-32'}`}>
           {messages.map((message, i) => {
             // Check if this is a summary message that should trigger special rendering
             if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
@@ -411,17 +411,17 @@ export default function ChatPage() {
             return (
               <div
                 key={i}
-                className={`flex items-start space-x-4 mb-6 ${
+                className={`flex items-start space-x-3 mb-4 ${
                   message.role === 'user' ? 'justify-end' : 'justify-start'
                 }`}
               >
                 {message.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
-                    <span className="text-black text-sm">wl</span>
+                  <div className="w-7 h-7 rounded-full bg-white flex-shrink-0 flex items-center justify-center">
+                    <span className="text-black text-xs">wl</span>
                   </div>
                 )}
                 <div
-                   className={`relative max-w-[80%] rounded-2xl px-4 py-3 whitespace-pre-wrap break-words ${
+                   className={`relative max-w-[80%] rounded-2xl px-3 py-2 whitespace-pre-wrap break-words text-sm ${
                     message.role === 'user'
                       ? 'bg-white text-black'
                       : 'bg-gray-800 text-white'
@@ -432,19 +432,19 @@ export default function ChatPage() {
                     </div>
                 </div>
                 {message.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
-                    <span className="text-white text-sm">Me</span>
+                  <div className="w-7 h-7 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
+                    <span className="text-white text-xs">Me</span>
                   </div>
                 )}
               </div>
             );
           })}
           {isLoading && (
-            <div className="flex items-start space-x-4">
-              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                <span className="text-black text-sm">wl</span>
+            <div className="flex items-start space-x-3">
+              <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center flex-shrink-0">
+                <span className="text-black text-xs">wl</span>
               </div>
-              <div className="bg-gray-800 text-white px-4 py-3 rounded-2xl">
+              <div className="bg-gray-800 text-white px-3 py-2 rounded-2xl">
                 <div className="flex space-x-2">
                   <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
                   <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -455,7 +455,7 @@ export default function ChatPage() {
           )}
           {error && (
             <div className="flex justify-center">
-              <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded-lg">
+              <div className="bg-red-500/10 border border-red-500 text-red-500 px-3 py-2 rounded-lg text-sm">
                 {error}
               </div>
             </div>
@@ -481,8 +481,8 @@ export default function ChatPage() {
                     }
                   }}
                   placeholder="Share your thoughts..."
-                  className="w-full bg-transparent text-white rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[44px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
-                  style={{ height: '44px' }}
+                  className="w-full bg-transparent text-white text-sm rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
+                  style={{ height: '40px' }}
                   rows={1}
                   disabled={isLoading}
                 />
@@ -494,7 +494,7 @@ export default function ChatPage() {
                              disabled:opacity-50 disabled:cursor-not-allowed
                              enabled:bg-purple-600 enabled:hover:bg-purple-700 transition-colors"
                   >
-                    <PaperAirplaneIcon className="h-5 w-5" />
+                    <PaperAirplaneIcon className="h-4 w-4" />
                   </button>
                 </div>
               </div>
