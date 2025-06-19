@@ -13,6 +13,30 @@ interface ChatMessage {
   content: string;
 }
 
+// Add a function to format summary content similar to chat messages
+const formatSummaryContent = (content: string) => {
+  // Split content by line breaks first, then handle bold formatting within each line
+  return content.split('\n').map((line, lineIndex) => {
+    // Handle bold formatting within each line
+    const formattedLine = line.split(/(\*\*[^*]+\*\*)/).map((part, partIndex) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        // Remove the ** and wrap in bold span
+        const text = part.slice(2, -2);
+        return <span key={`${lineIndex}-${partIndex}`} className="font-bold">{text}</span>;
+      }
+      return part;
+    });
+    
+    // Return each line with proper line break handling
+    return (
+      <span key={lineIndex}>
+        {formattedLine}
+        {lineIndex < content.split('\n').length - 1 && <br />}
+      </span>
+    );
+  });
+};
+
 // Mock summary - set to null initially
 const mockSummary = null;
 
@@ -130,7 +154,9 @@ export default function ProfilePage() {
                 {summary ? (
                   <div className="space-y-6">
                     <div className="prose prose-invert max-w-none">
-                      <p className="text-gray-300 leading-relaxed">{summary}</p>
+                      <div className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                        {formatSummaryContent(summary)}
+                      </div>
                     </div>
                     <div className="border-t border-gray-800 pt-4 mt-6">
                       <p className="text-gray-300 mb-3">Check your wavelength with others</p>

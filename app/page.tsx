@@ -28,7 +28,9 @@ export default function Home() {
           src="/main-bg-mobile.jpg"
           alt="Mobile Background"
           fill
-          style={{ objectFit: 'cover', objectPosition: '59% 40%' }}
+
+          style={{ objectFit: 'cover', objectPosition:'59% 40%' }}
+
           priority
           className="opacity-90"
         />

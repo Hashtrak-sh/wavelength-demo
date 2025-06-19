@@ -8,14 +8,25 @@ import { useToast } from "@/hooks/use-toast";
 import { chatService } from '@/lib/supabase-service';
 
 const formatMessageContent = (content: string) => {
-  // Replace **text** with bold spans
-  return content.split(/(\*\*[^*]+\*\*)/).map((part, index) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      // Remove the ** and wrap in bold span
-      const text = part.slice(2, -2);
-      return <span key={index} className="font-bold">{text}</span>;
-    }
-    return part;
+  // Split content by line breaks first, then handle bold formatting within each line
+  return content.split('\n').map((line, lineIndex) => {
+    // Handle bold formatting within each line
+    const formattedLine = line.split(/(\*\*[^*]+\*\*)/).map((part, partIndex) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        // Remove the ** and wrap in bold span
+        const text = part.slice(2, -2);
+        return <span key={`${lineIndex}-${partIndex}`} className="font-bold">{text}</span>;
+      }
+      return part;
+    });
+    
+    // Return each line with proper line break handling
+    return (
+      <span key={lineIndex}>
+        {formattedLine}
+        {lineIndex < content.split('\n').length - 1 && <br />}
+      </span>
+    );
   });
 };
 
@@ -298,7 +309,7 @@ export default function ChatPage() {
           <span className="text-black text-xs">wl</span>
         </div>
         <div className="relative max-w-[80%] rounded-2xl px-3 py-2 bg-gray-800 text-white text-sm">
-          <div className="overflow-hidden">
+          <div className="overflow-hidden whitespace-pre-wrap">
             {formatMessageContent(message.content)}
           </div>
         </div>
@@ -427,9 +438,9 @@ export default function ChatPage() {
                       : 'bg-gray-800 text-white'
                   }`}
                 >
-                  <div className="overflow-hidden">
-                  {formatMessageContent(message.content)}
-                    </div>
+                  <div className="overflow-hidden whitespace-pre-wrap">
+                    {formatMessageContent(message.content)}
+                  </div>
                 </div>
                 {message.role === 'user' && (
                   <div className="w-7 h-7 rounded-full bg-gray-700 flex-shrink-0 flex items-center justify-center">
