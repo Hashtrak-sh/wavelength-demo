@@ -106,6 +106,16 @@ export default function ChatPage() {
     }
   }, [messages]);
 
+  // Auto-focus input after API response
+  useEffect(() => {
+    if (!isLoading && textareaRef.current && (whatsappFlowState === null || whatsappFlowState === 'completed')) {
+      // Small delay to ensure the DOM has updated and the input is visible
+      setTimeout(() => {
+        textareaRef.current?.focus();
+      }, 100);
+    }
+  }, [isLoading, whatsappFlowState]);
+
   // Dynamic textarea height
   useEffect(() => {
     const textarea = textareaRef.current;

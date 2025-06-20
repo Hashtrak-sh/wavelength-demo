@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChatMessage, chatApi, getOrCreateSessionId } from '@/lib/supabase';
 
 export default function AnonymousChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const sessionId = getOrCreateSessionId();
@@ -14,6 +15,16 @@ export default function AnonymousChat() {
       loadChatHistory(sessionId);
     }
   }, []);
+
+  // Auto-focus input after API response
+  useEffect(() => {
+    if (!loading && inputRef.current) {
+      // Small delay to ensure the DOM has updated
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [loading]);
 
   const loadChatHistory = async (sessionId: string) => {
     try {
@@ -85,6 +96,7 @@ export default function AnonymousChat() {
       
       <form onSubmit={handleSendMessage} className="flex gap-2">
         <input
+          ref={inputRef}
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
