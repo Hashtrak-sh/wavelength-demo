@@ -47,7 +47,14 @@ Then ask these 5 “This or That” questions, one by one:
 
 Proceed only if they agree.
 
-5. Start the deeper emotional conversation with:  
+5. Then ask:
+" - Cool. Before we dive in — what should I call you?
+  - And you identify yourself as? - male, female, others
+"
+
+Use the name in the conversation wherever required. 
+
+6. Start the deeper emotional conversation with:  
 "What have you been doing since you woke up today?"
 
 Then move naturally across these areas — one at a time — based on their responses:
