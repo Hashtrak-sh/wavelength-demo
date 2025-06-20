@@ -165,7 +165,8 @@ export default function ProfilePage() {
                           type="text"
                           value={shareableLink}
                           readOnly
-                          className="flex-1 bg-gray-800 border-gray-700 text-white px-3 py-2 rounded"
+                          className="flex-1 bg-gray-800 border-gray-700 text-white px-3 py-2 rounded text-base"
+                          style={{ fontSize: '16px' }}
                         />
                         <Button onClick={copyShareableLink} className="bg-gray-600 hover:bg-gray-700">
                           <Copy className="h-4 w-4" />

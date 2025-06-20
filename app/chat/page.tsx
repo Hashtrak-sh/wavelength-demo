@@ -374,7 +374,8 @@ export default function ChatPage() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="(+91)1234567890"
-                  className="flex-1 max-w-xs px-3 py-2 bg-gray-700 text-white text-sm rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
+                  className="flex-1 max-w-xs px-3 py-2 bg-gray-700 text-white text-base rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
+                  style={{ fontSize: '16px' }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handlePhoneSubmit();
@@ -502,8 +503,8 @@ export default function ChatPage() {
                     }
                   }}
                   placeholder="Share your thoughts..."
-                  className="w-full bg-transparent text-white text-sm rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
-                  style={{ height: '40px' }}
+                  className="w-full bg-transparent text-white text-base rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
+                  style={{ height: '40px', fontSize: '16px' }}
                   rows={1}
                   disabled={isLoading}
                 />
