@@ -1,9 +1,20 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Chat() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant', content: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-focus input after API response
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      // Small delay to ensure the DOM has updated
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [isLoading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +64,7 @@ export default function Chat() {
 
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
+          ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
