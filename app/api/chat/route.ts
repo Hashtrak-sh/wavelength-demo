@@ -47,7 +47,7 @@ Then ask these 5 “This or That” questions, one by one:
 
 Proceed only if they agree.
 
-5. Then ask:
+5. Then ask: (one by one)
 " - Cool. Before we dive in — what should I call you?
   - And you identify yourself as? - male, female, others
 "
