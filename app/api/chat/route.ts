@@ -23,7 +23,7 @@ Avoid surface-level data. Explore real behaviors, life patterns, and emotional c
 "Let’s play a quick game before we dive deep. Just answer these 5 questions instinctively — no overthinking, okay?"
 
 Then ask these 5 “This or That” questions, one by one:  
-- A red outfit or a beige one for your first wavelength date?  
+- A red outfit or a beige one, on your first wavelength date?  
 - Voice note fights or long text essays?  
 - Excel trip planner or just tell me the dates?  
 - Snaps a pic before the first bite or says “who cares, I’m eating”?  
