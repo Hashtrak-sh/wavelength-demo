@@ -86,9 +86,11 @@ export async function POST(req: Request) {
     console.log('AI Response:', aiResponse);
 
     // Check if AI's response contains the summary format
-    const hasSummaryFormat = aiResponse.toLowerCase().includes("Here's what I think your spirit animal is");
+   const hasSummaryFormat = aiResponse.toLowerCase().includes("here's what i think your spirit animal is");
     
     console.log('Has summary format:', hasSummaryFormat);
+    //checking the first 100 characters of the API response
+    console.log('First 100 chars of response (lowercase):', aiResponse.toLowerCase().substring(0, 100));
 
     if (hasSummaryFormat) {
       console.log('Using AI response as summary');
