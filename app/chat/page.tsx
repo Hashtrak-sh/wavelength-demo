@@ -136,13 +136,15 @@ export default function ChatPage() {
           const viewport = window.visualViewport;
           const handleViewportChange = () => {
             const newKeyboardHeight = window.innerHeight - viewport.height;
-            setKeyboardHeight(Math.max(0, newKeyboardHeight));
+            // Only set keyboard height if it's significant (more than 150px)
+            const significantHeight = newKeyboardHeight > 150 ? newKeyboardHeight : 0;
+            setKeyboardHeight(significantHeight);
             
             // Scroll to bottom when keyboard appears
-            if (newKeyboardHeight > 0) {
+            if (significantHeight > 0) {
               setTimeout(() => {
-                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+              }, 200);
             }
           };
 
@@ -155,12 +157,14 @@ export default function ChatPage() {
           const handleResize = () => {
             const currentHeight = window.innerHeight;
             const heightDiff = initialHeight - currentHeight;
-            setKeyboardHeight(Math.max(0, heightDiff));
+            // Only set keyboard height if it's significant (more than 150px)
+            const significantHeight = heightDiff > 150 ? heightDiff : 0;
+            setKeyboardHeight(significantHeight);
             
-            if (heightDiff > 100) { // Keyboard is likely open
+            if (significantHeight > 0) {
               setTimeout(() => {
-                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+              }, 200);
             }
           };
 
@@ -428,8 +432,8 @@ export default function ChatPage() {
                   onFocus={() => {
                     // Scroll to bottom when focusing input
                     setTimeout(() => {
-                      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-                    }, 300);
+                      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }, 400);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -475,15 +479,15 @@ export default function ChatPage() {
   return (
     <div 
       ref={chatContainerRef}
-      className="flex bg-black overflow-x-hidden"
+      className="flex h-screen bg-black overflow-x-hidden"
       style={{ 
-        height: keyboardHeight > 0 ? `calc(100vh - ${keyboardHeight}px)` : '100vh'
+        paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0px'
       }}
     >
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col w-full">
+      <div className="flex-1 flex flex-col w-full h-full">
         {/* Chat messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-4 min-h-0">
           {messages.map((message, i) => {
             // Check if this is a summary message that should trigger special rendering
             if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
@@ -566,8 +570,8 @@ export default function ChatPage() {
                   onFocus={() => {
                     // Scroll to bottom when focusing input
                     setTimeout(() => {
-                      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-                    }, 300);
+                      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }, 400);
                   }}
                   placeholder="Share your thoughts..."
                   className="w-full bg-transparent text-white text-base rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
