@@ -54,8 +54,10 @@ export default function ChatPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [whatsappFlowState, setWhatsappFlowState] = useState<WhatsAppFlowState | null>(null);
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -124,6 +126,53 @@ export default function ChatPage() {
       textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
     }
   }, [input]);
+
+  // Keyboard detection and handling
+  useEffect(() => {
+    const handleKeyboard = () => {
+      if (typeof window !== 'undefined') {
+        // Use visualViewport API if available (modern browsers)
+        if (window.visualViewport) {
+          const viewport = window.visualViewport;
+          const handleViewportChange = () => {
+            const newKeyboardHeight = window.innerHeight - viewport.height;
+            setKeyboardHeight(Math.max(0, newKeyboardHeight));
+            
+            // Scroll to bottom when keyboard appears
+            if (newKeyboardHeight > 0) {
+              setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }
+          };
+
+          viewport.addEventListener('resize', handleViewportChange);
+          return () => viewport.removeEventListener('resize', handleViewportChange);
+        } else {
+          // Fallback for older browsers
+          const initialHeight = window.innerHeight;
+          
+          const handleResize = () => {
+            const currentHeight = window.innerHeight;
+            const heightDiff = initialHeight - currentHeight;
+            setKeyboardHeight(Math.max(0, heightDiff));
+            
+            if (heightDiff > 100) { // Keyboard is likely open
+              setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }
+          };
+
+          window.addEventListener('resize', handleResize);
+          return () => window.removeEventListener('resize', handleResize);
+        }
+      }
+    };
+
+    const cleanup = handleKeyboard();
+    return cleanup;
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -335,7 +384,7 @@ export default function ChatPage() {
     
     if (whatsappFlowState === 'ask-whatsapp') {
       return (
-        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+        <div className="border-t border-black p-4 bg-black flex-shrink-0">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
               <p className="mb-3 text-sm text-white">Basis what we have gathered about you, would you want us to notify about a potential match who matches your wavelength?
@@ -362,7 +411,7 @@ export default function ChatPage() {
 
     if (whatsappFlowState === 'phone-input') {
       return (
-        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+        <div className="border-t border-black p-4 bg-black flex-shrink-0">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
              <p className="mb-3 text-sm text-white">
@@ -376,6 +425,12 @@ export default function ChatPage() {
                   placeholder="(+91)1234567890"
                   className="flex-1 max-w-xs px-3 py-2 bg-gray-700 text-white text-base rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
                   style={{ fontSize: '16px' }}
+                  onFocus={() => {
+                    // Scroll to bottom when focusing input
+                    setTimeout(() => {
+                      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handlePhoneSubmit();
@@ -398,7 +453,7 @@ export default function ChatPage() {
 
     if (whatsappFlowState === 'ask-continue') {
       return (
-        <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+        <div className="border-t border-black p-4 bg-black flex-shrink-0">
           <div className="max-w-4xl mx-auto">
             <div className="bg-black-800 rounded-xl p-4 text-center">
               <p className="mb-3 text-sm text-white">Would you like to continue chatting?</p>
@@ -418,11 +473,17 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-[100dvh] bg-black overflow-x-hidden">
+    <div 
+      ref={chatContainerRef}
+      className="flex bg-black overflow-x-hidden"
+      style={{ 
+        height: keyboardHeight > 0 ? `calc(100vh - ${keyboardHeight}px)` : '100vh'
+      }}
+    >
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col w-full">
         {/* Chat messages */}
-        <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${whatsappFlowState && whatsappFlowState !== 'completed' ? 'pb-48' : 'pb-32'}`}>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-4">
           {messages.map((message, i) => {
             // Check if this is a summary message that should trigger special rendering
             if (message.generatesSummary && whatsappFlowState && whatsappFlowState !== 'completed') {
@@ -489,7 +550,7 @@ export default function ChatPage() {
         {whatsappFlowState && whatsappFlowState !== 'completed' ? (
           renderWhatsAppModal()
         ) : (
-          <div className="border-t border-black p-4 fixed bottom-0 left-0 right-0 bg-black mt-8">
+          <div className="border-t border-black p-4 bg-black flex-shrink-0">
             <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
               <div className="relative flex items-center bg-gray-800 rounded-xl">
                 <textarea
@@ -501,6 +562,12 @@ export default function ChatPage() {
                       e.preventDefault();
                       handleSubmit(e);
                     }
+                  }}
+                  onFocus={() => {
+                    // Scroll to bottom when focusing input
+                    setTimeout(() => {
+                      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
                   }}
                   placeholder="Share your thoughts..."
                   className="w-full bg-transparent text-white text-base rounded-xl pl-4 pr-14 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none max-h-[120px] min-h-[40px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
