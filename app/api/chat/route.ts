@@ -37,6 +37,8 @@ Then ask these 5 “This or That” questions, one by one:
 3. Then spark curiosity like this:  
 "BTW… have you ever wondered what your spirit animal would be?"  
 
+→ If they answer affirmative, get to know what do they think they are? And understand why? Then lead on to the conversation.
+
 → If they seem unsure or don't give a definite answer, follow up with:  
 "Spirit animals usually reveal your emotional type. Want to find out through a quick 5-minute chat? I promise I won’t disappoint you 😋"
 
