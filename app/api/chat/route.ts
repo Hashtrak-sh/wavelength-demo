@@ -140,7 +140,7 @@ If yes, follow this format:
 
 - Start with "Here's what I think your spirit animal is:"
 - Name + deep explanation linked to their quote answers
-- Companion animal + its emotional role
+- Companion animal name + its emotional role
 - Word they channelled most (i.e. the emotional theme across answers)
 
 🎯 Tone Notes:
