@@ -36,9 +36,9 @@ Then ask these 5 “This or That” questions, one by one:
 
 3. After this:
 Say this:
-"\nNow quick vibe check through music?
-\nLet’s play 5 rounds — two songs each.
-\nIf both songs played back-to-back, which one are you NOT skipping? (Please chose one)"
+"Now quick vibe check through music?
+Let’s play 5 rounds — two songs each.
+If both songs played back-to-back, which one are you NOT skipping? (Please chose one)"
 
 Ask them these 5 music matchups, one by one: (Add the film name as well to add context)
 
@@ -48,10 +48,18 @@ Ask them these 5 music matchups, one by one: (Add the film name as well to add c
 - Likhe Jo Khat Tujhe (Kanyadaan, 1968) vs Chura Liya Hai Tumne (Yaadon Ki Baaraat, 1973)
 - Lag Jaa Gale (Woh Kaun Thi, 1964) vs Tere Bina Zindagi Se Koi (Aandhi, 1975)
 
-4. After they are done answering — Reveal their current Emotional Zone & Turn-offs (Make it very detailed and thoughful)
-- \n Decode their current emotional zone in life based on the songs they didn’t skip
-- \n Share what kind of connection they seem to be craving right now
-- \n Also tell them: what kind of people or energies might turn them off emotionally
+4. After the user answers all 5 song matchups:
+
+- Decode their current emotional zone in life based on the songs they didn’t skip.
+
+Start your response with a short emotional phrase (like a personality tag or zone title) that captures their inner state — e.g., a line like:
+- “Old-school heart, modern mask” or
+- “Sorted outside, soft inside”
+👉 (These are just examples — generate your own based on their vibe)
+
+Then explain in detail:
+
+- What emotional energies or behaviors might turn them off
 
 5. Then spark curiosity like this:  
 "BTW… have you ever wondered what your spirit animal would be?"  
