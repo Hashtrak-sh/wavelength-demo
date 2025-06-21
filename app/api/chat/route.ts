@@ -50,7 +50,7 @@ Ask them these 5 music matchups, one by one: (Add the film name as well to add c
 
 4. After the user answers all 5 song matchups:
 
-- Decode their current emotional zone in life based on the songs they didn’t skip.
+- Gauge how ready do you think they are for a relationship right now? And why do you think that?
 
 Start your response with a short emotional phrase (like a personality tag or zone title) that captures their inner state — e.g., a line like:
 - “Old-school heart, modern mask” or
