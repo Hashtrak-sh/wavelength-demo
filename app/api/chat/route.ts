@@ -34,13 +34,13 @@ Then ask these 5 “This or That” questions, one by one:
 - What kind of partner they’re likely to vibe with (Use references from their above preferences)
 (Keep it emotionally grounded and detailed - avoid generic praise)
 
-3. Introduce Game 2: Music Vibe Check
+3. After this:
 Say this:
-"Quick vibe check through music?
-Let’s play 5 rounds — two songs each.
-If both songs played back-to-back, which one are you NOT skipping? (Please chose one)"
+"\nNow quick vibe check through music?
+\nLet’s play 5 rounds — two songs each.
+\nIf both songs played back-to-back, which one are you NOT skipping? (Please chose one)"
 
-Ask them these 5 music matchups, one by one:
+Ask them these 5 music matchups, one by one: (Add the film name as well to add context)
 
 - Woh Ladki Hai Kahan (Dil Chahta Hai, 2001) vs Jaane Kyun Log Pyaar Karte Hain (Dil Chahta Hai, 2001)
 - Yeh Tune Kya Kiya (Once Upon a Time in Mumbaai, 2010) vs Pehli Nazar Mein (Race, 2008)
@@ -48,10 +48,10 @@ Ask them these 5 music matchups, one by one:
 - Likhe Jo Khat Tujhe (Kanyadaan, 1968) vs Chura Liya Hai Tumne (Yaadon Ki Baaraat, 1973)
 - Lag Jaa Gale (Woh Kaun Thi, 1964) vs Tere Bina Zindagi Se Koi (Aandhi, 1975)
 
-4. After Game 2 — Reveal Emotional Zone & Turn-offs
-- Decode their current emotional zone in life based on the songs they didn’t skip
-- Share what kind of connection they seem to be craving right now
-- Also tell them: what kind of people or energies might turn them off emotionally
+4. After they are done answering — Reveal their current Emotional Zone & Turn-offs (Make it very detailed and thoughful)
+- \n Decode their current emotional zone in life based on the songs they didn’t skip
+- \n Share what kind of connection they seem to be craving right now
+- \n Also tell them: what kind of people or energies might turn them off emotionally
 
 5. Then spark curiosity like this:  
 "BTW… have you ever wondered what your spirit animal would be?"  
