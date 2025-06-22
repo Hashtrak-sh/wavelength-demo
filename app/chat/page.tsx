@@ -42,7 +42,7 @@ type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'comp
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Let’s warm up with something fun — just say what feels more like you — no overthinking, okay?"
+  content: "Let’s warm up with something fun — no overthinking, let's start?"
 };
 
 export default function ChatPage() {
