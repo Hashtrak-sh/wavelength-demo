@@ -268,7 +268,7 @@ export default function ChatPage() {
       // Add confirmation message
       const confirmMessage: Message = {
         role: 'assistant',
-        content: "Great! I've noted your WhatsApp number. Let's continue our conversation!"
+        content: "Great! I've noted your Whatsapp Number. Let me tell your spirit animal companion now?"
       };
       setMessages(prev => [...prev, confirmMessage]);
       
