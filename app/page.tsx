@@ -50,7 +50,7 @@ export default function Home() {
           className="border rounded-full px-5 md:px-6 py-2 md:py-2.5 text-base md:text-lg bg-white/10 backdrop-blur-sm transition-all duration-300 italic mb-6 md:mb-8 drop-shadow-lg hover:bg-white hover:text-black"
           style={{ borderColor: '#f5e8d6', color: '#f5e8d6' }}
         >
-          Got 10 mins to chat? 
+          Got 5 mins to chat? 
         </button>
 
         <div className="relative w-[180px] md:w-[260px] h-[135px] md:h-[175px] drop-shadow-xl">
