@@ -37,7 +37,7 @@ Then ask these 5 “This or That” questions, one by one:
 (Keep it emotionally grounded and to the point - avoid generic praise)
 
 Then say:
-"You’ve been super real so far — one more fun round?"
+"You’ve been super real so far — a musical round now?"
 
 Let the user give an affirmative response.
 
