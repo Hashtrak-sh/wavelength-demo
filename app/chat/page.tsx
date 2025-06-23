@@ -42,7 +42,7 @@ type WhatsAppFlowState = 'ask-whatsapp' | 'phone-input' | 'ask-continue' | 'comp
 
 const INITIAL_MESSAGE: Message = {
   role: 'assistant',
-  content: "Hey, Think of me like that friend who actually follows through and sets you up — but I listen better 😉 Let's find someone on your wavelength?"
+  content: "Let’s warm up with something fun — no overthinking, let's start?"
 };
 
 export default function ChatPage() {
@@ -268,7 +268,7 @@ export default function ChatPage() {
       // Add confirmation message
       const confirmMessage: Message = {
         role: 'assistant',
-        content: "Great! I've noted your WhatsApp number. Let's continue our conversation!"
+        content: "Great! I've noted your Whatsapp Number. Let me tell your spirit animal companion now?"
       };
       setMessages(prev => [...prev, confirmMessage]);
       
