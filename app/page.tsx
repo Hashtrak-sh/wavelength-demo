@@ -42,9 +42,9 @@ export default function Home() {
       <div className="relative z-10 flex flex-col items-center mt-[10vh] px-4 w-full max-w-4xl mx-auto">
         <h1 
           style={{ fontFamily: 'Poppins, sans-serif', color: '#f5e8d6' }}
-          className="text-3xl md:text-4xl font-light mb-6 md:mb-8 text-center drop-shadow-lg">Let's Set You Up! 
+          className="text-3xl md:text-4xl font-light mb-6 md:mb-8 text-center drop-shadow-lg">An AI that Set's You Up! 
         </h1>
-        <p className="text-lg md:text-2xl italic mb-6 md:mb-8 text-center drop-shadow-md" style={{ color: '#f5e8d6' }}>An AI that gets your wavelength & connects you better</p>
+        <p className="text-lg md:text-2xl italic mb-6 md:mb-8 text-center drop-shadow-md" style={{ color: '#f5e8d6' }}>No more swiping, No more filtering</p>
         <button
           onClick={() => router.push('/chat')}
           className="border rounded-full px-5 md:px-6 py-2 md:py-2.5 text-base md:text-lg bg-white/10 backdrop-blur-sm transition-all duration-300 italic mb-6 md:mb-8 drop-shadow-lg hover:bg-white hover:text-black"
