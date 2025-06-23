@@ -4,6 +4,8 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/components/auth-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { GoogleAnalytics } from '@next/third-parties/google'
+import { AnalyticsDebug } from "@/components/analytics-debug"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -55,6 +57,14 @@ export default function RootLayout({
           <main>{children}</main>
           <Toaster />
         </AuthProvider>
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics 
+            gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}
+            dataLayerName="dataLayer"
+            debugMode={process.env.NODE_ENV === 'development'}
+          />
+        )}
+        <AnalyticsDebug />
       </body>
     </html>
   )

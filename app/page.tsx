@@ -2,9 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { analytics } from '@/lib/analytics';
 
 export default function Home() {
   const router = useRouter();
+
+  const handleChatButtonClick = () => {
+    // Track the button click event
+    analytics.trackChatStart();
+    
+    // Navigate to chat page
+    router.push('/chat');
+  };
 
   return (
     <main className="relative flex min-h-screen flex-col items-center p-4" style={{ color: '#f5e8d6' }}>
@@ -46,7 +55,7 @@ export default function Home() {
         </h1>
         <p className="text-lg md:text-2xl italic mb-6 md:mb-8 text-center drop-shadow-md" style={{ color: '#f5e8d6' }}>No more swiping, No more filtering</p>
         <button
-          onClick={() => router.push('/chat')}
+          onClick={handleChatButtonClick}
           className="border rounded-full px-5 md:px-6 py-2 md:py-2.5 text-base md:text-lg bg-white/10 backdrop-blur-sm transition-all duration-300 italic mb-6 md:mb-8 drop-shadow-lg hover:bg-white hover:text-black"
           style={{ borderColor: '#f5e8d6', color: '#f5e8d6' }}
         >
