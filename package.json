@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:supabase": "node scripts/test-supabase-connection.mjs",
+    "test:login": "node scripts/test-login-flow.mjs",
     "debug:env": "node scripts/debug-env.mjs",
     "deploy": "vercel deploy --prod"
   },

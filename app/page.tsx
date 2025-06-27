@@ -11,8 +11,8 @@ export default function Home() {
     // Track the button click event
     analytics.trackChatStart();
     
-    // Navigate to chat page
-    router.push('/chat');
+    // Navigate to login page instead of chat
+    router.push('/login');
   };
 
   return (
