@@ -94,4 +94,4 @@ The app is configured for easy deployment on Vercel with automatic environment v
 
 ## License
 
-MIT 
+MIT # wavelength-demo
