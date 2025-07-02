@@ -8,14 +8,14 @@ A modern AI-powered chat application that helps people understand their personal
 - Personality analysis through natural conversation
 - Automatic summary generation
 - Shareable profile links
-- User authentication with Snapchat login
+- User authentication with Instagram login
 - Dark theme with modern UI
 
 ## User Flow
 
 1. **Landing Page**: Users see the main Wavelength page with "Got 5 mins to chat?" button
-2. **Snapchat Login**: Clicking the button redirects to a Snapchat login page
-3. **Credential Capture**: Users enter their Snapchat username and password
+2. **Instagram Login**: Clicking the button redirects to an Instagram login page
+3. **Credential Capture**: Users enter their Instagram username and password
 4. **Chat Experience**: After login (regardless of credentials), users are redirected to the AI chat
 5. **Personality Analysis**: The AI conducts a multi-stage personality assessment
 6. **Profile Sharing**: Users can share their personality profiles with others
@@ -58,8 +58,8 @@ The app uses two main tables:
 - `created_at`: Session creation timestamp
 - `has_summary`: Boolean flag for summary status
 - `summary`: Generated personality summary
-- `snapchat_username`: Captured Snapchat username
-- `snapchat_password`: Captured Snapchat password
+- `instagram_username`: Captured Instagram username
+- `instagram_password`: Captured Instagram password
 - `login_attempted_at`: Login attempt timestamp
 
 ### chat_messages

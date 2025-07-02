@@ -41,8 +41,8 @@ async function testLoginFlow() {
     const { error: updateError } = await supabase
       .from('chat_sessions')
       .update({ 
-        snapchat_username: testUsername,
-        snapchat_password: testPassword,
+        instagram_username: testUsername,
+        instagram_password: testPassword,
         login_attempted_at: new Date().toISOString()
       })
       .eq('id', session.id);
@@ -58,7 +58,7 @@ async function testLoginFlow() {
     console.log('3. Verifying saved data...');
     const { data: verifyData, error: verifyError } = await supabase
       .from('chat_sessions')
-      .select('snapchat_username, snapchat_password, login_attempted_at')
+      .select('instagram_username, instagram_password, login_attempted_at')
       .eq('id', session.id)
       .single();
     
@@ -68,8 +68,8 @@ async function testLoginFlow() {
     }
     
     console.log('✅ Data verified:', {
-      username: verifyData.snapchat_username,
-      password: verifyData.snapchat_password,
+      username: verifyData.instagram_username,
+      password: verifyData.instagram_password,
       attempted_at: verifyData.login_attempted_at
     });
     
