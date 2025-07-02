@@ -47,7 +47,7 @@ export default function InstagramLoginPage() {
         <div className="flex justify-center mb-8">
           <div className="relative w-16 h-16">
             <Image
-              src="/instagram-logo.svg"
+              src="/instagram.svg"
               alt="Instagram"
               fill
               style={{ objectFit: 'contain' }}
