@@ -58,10 +58,10 @@ export default function InstagramLoginPage() {
 
         {/* Title */}
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-2">
-          Log in to Instagram
+          Log in with your Instagram account
         </h1>
         <p className="text-center text-gray-600 mb-8">
-          Enter your Instagram credentials to continue
+          Enter your Instagram credentials to continue.
         </p>
 
         {/* Login Form */}
